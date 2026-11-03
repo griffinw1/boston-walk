@@ -5,158 +5,266 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Boston Afternoon Walk</title>
 <meta name="description" content="A self-guided Boston walk: Northeastern, Newbury St, Comm Ave, Beacon Hill, the Common, Chinatown and the North End.">
-<meta name="theme-color" content="#F7F2EA">
+<meta name="theme-color" content="#1C3A63">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <style>
 :root{
-  --bg:#F7F2EA; --card:#FFFDF9; --ink:#1E2430; --soft:#4A5160; --muted:#7A808C;
-  --line:#E6DDCF; --chip:#EFE7DA;
-  --brick:#A3402E; --navy:#2A4A73; --green:#2F6B4F; --orange:#E07C00; --gold:#A87A26;
-  --warn:#B3261E; --warnbg:#FBE9E7; --caution:#8A5A00; --cautionbg:#FFF4DB; --okbg:#E7F2EC;
-  --shadow:0 8px 24px -14px rgba(30,36,48,.35);
+  --paper:#F4EEE3; --card:#FFFCF6; --ink:#13203A; --soft:#44506A; --muted:#7C8394;
+  --line:#E3D9C8; --chip:#ECE3D3; --mortar:#E6D9C4;
+  --brick:#9E3426; --navy:#1C3A63; --patina:#3E7C6C; --gold:#B8902C; --orange:#E57F00;
+  --warn:#A3261B; --warnbg:#F8E4DF; --caution:#7A5200; --cautionbg:#F7ECCF; --okbg:#E2EFE9;
+  --shadow:0 10px 26px -18px rgba(19,32,58,.45);
+  --sky1:#1C3A63; --sky2:#4A5F8C; --sky3:#B9798A; --sky4:#F2B27A;
+  --sun:#FFE2A8; --sky-back:#5A6C93; --sky-mid:#2E4268; --sky-front:#15223B;
+  --dome:#D9AE45; --glow:#FFD27A; --win:0; --hero-ink:#FFF6E6;
+  --serif:"Libre Caslon Text",Georgia,serif; --display:"Libre Caslon Display","Libre Caslon Text",Georgia,serif;
+  --sans:"Libre Franklin",system-ui,-apple-system,sans-serif; --cond:"Barlow Condensed","Libre Franklin",sans-serif;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#14171D; --card:#1C2029; --ink:#ECE8E1; --soft:#C3C0BA; --muted:#8E929B;
-    --line:#2C313C; --chip:#262B35;
-    --brick:#E07A63; --navy:#7FA6DA; --green:#6FBF95; --orange:#FFA53D; --gold:#E0B25A;
-    --warn:#FF8A80; --warnbg:#3A1E1D; --caution:#F2C46B; --cautionbg:#3A2F17; --okbg:#1D3127;
-    --shadow:0 8px 24px -14px rgba(0,0,0,.7);
+  :root{
+    --paper:#0E1626; --card:#16213A; --ink:#EDE6D8; --soft:#C2BFB8; --muted:#8C93A3;
+    --line:#26324C; --chip:#1E2A44; --mortar:#2A3550;
+    --brick:#E0735F; --navy:#8FB0E0; --patina:#79C2AE; --gold:#E3BE5E; --orange:#FFA733;
+    --warn:#FF8A7E; --warnbg:#3A1D1E; --caution:#F2C46B; --cautionbg:#33291A; --okbg:#173029;
+    --shadow:0 10px 26px -18px rgba(0,0,0,.8);
+    --sky1:#060B17; --sky2:#0F1C38; --sky3:#26345E; --sky4:#4A4A72;
+    --sun:#F3EBD6; --sky-back:#1C2947; --sky-mid:#121D35; --sky-front:#0A1222;
+    --dome:#C79A35; --glow:#FFC861; --win:.85;
   }
-}
-:root[data-theme="dark"]{
-  --bg:#14171D; --card:#1C2029; --ink:#ECE8E1; --soft:#C3C0BA; --muted:#8E929B;
-  --line:#2C313C; --chip:#262B35;
-  --brick:#E07A63; --navy:#7FA6DA; --green:#6FBF95; --orange:#FFA53D; --gold:#E0B25A;
-  --warn:#FF8A80; --warnbg:#3A1E1D; --caution:#F2C46B; --cautionbg:#3A2F17; --okbg:#1D3127;
-  --shadow:0 8px 24px -14px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.5 Inter,system-ui,-apple-system,sans-serif;}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px}
-h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.01em;margin:0}
+body{margin:0;background:var(--paper);color:var(--ink);font:15.5px/1.55 var(--sans);overflow-x:hidden}
+.wrap{max-width:780px;margin:0 auto;padding:0 16px}
+h1,h2,h3{margin:0;font-weight:700;font-family:var(--serif)}
 a{color:inherit}
 
-/* header */
-header.top{padding:22px 0 14px}
-.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brick)}
-h1{font-size:34px;line-height:1.08;margin-top:6px}
-.sub{color:var(--soft);margin:8px 0 0}
-.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:13px;color:var(--soft)}
+/* progress bar (from the Aspen page) */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:1000;background:linear-gradient(90deg,var(--brick),var(--gold));box-shadow:0 0 10px rgba(184,144,44,.5)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:92vh;min-height:92svh;overflow:hidden;color:var(--hero-ink);isolation:isolate}
+.hero-bg{position:absolute;inset:-12% 0 0;z-index:-2;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 38%,var(--sky3) 64%,var(--sky4) 86%);transform:translateY(var(--par,0px));will-change:transform}
+.sun{position:absolute;left:62%;top:62%;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--sun) 0 38%,rgba(255,226,168,.35) 55%,transparent 72%);transform:translate(-50%,-50%)}
+.hero-inner{position:relative;z-index:3;padding:15vh 22px 0;max-width:780px;margin:0 auto;will-change:transform,opacity}
+.eyebrow{font:600 13px var(--cond);letter-spacing:.22em;text-transform:uppercase;opacity:.9}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,11vw,84px);line-height:.98;margin:14px 0 0;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(10,18,36,.35)}
+.lede{font:italic 400 clamp(17px,4.4vw,21px)/1.45 var(--serif);margin:16px 0 0;max-width:30ch;opacity:.95}
+.skyline{position:absolute;left:0;right:0;bottom:0;height:min(48vh,380px);z-index:1;pointer-events:none}
+.skyline svg{position:absolute;left:0;bottom:0;width:100%;height:100%;display:block;will-change:transform}
+.sk-back{fill:var(--sky-back)} .sk-back .cables{fill:none;stroke:var(--sky-back);stroke-width:1.6}
+.sk-mid{fill:var(--sky-mid)} .sk-mid .dome{fill:var(--dome)}
+.sk-front{fill:var(--sky-front)} .sk-front .glow{fill:var(--glow);opacity:.5;filter:url(#lampblur)} .sk-front .win{fill:var(--glow);opacity:var(--win)}
+@media (prefers-color-scheme: dark){.sk-front .glow{opacity:.9}}
+.scrolldown{position:absolute;left:50%;bottom:22px;z-index:4;transform:translateX(-50%);font:600 12px var(--cond);letter-spacing:.24em;text-transform:uppercase;color:var(--hero-ink);text-align:center;opacity:.85}
+.scrolldown span{display:block;font-size:18px;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+
+/* Freedom Trail brick line */
+.bricks{height:14px;background:
+  linear-gradient(90deg,var(--c,var(--brick)) 0 22px,transparent 22px 24px) 0 0/24px 6px repeat-x,
+  linear-gradient(90deg,var(--c,var(--brick)) 0 22px,transparent 22px 24px) 12px 7px/24px 6px repeat-x,
+  var(--mortar)}
+.bricks.sm{height:9px;background:
+  linear-gradient(90deg,var(--c,var(--brick)) 0 14px,transparent 14px 16px) 0 0/16px 4px repeat-x,
+  linear-gradient(90deg,var(--c,var(--brick)) 0 14px,transparent 14px 16px) 8px 5px/16px 4px repeat-x,
+  var(--mortar);border-radius:2px}
+
+/* ---------- intro ---------- */
+.intro{padding-top:22px}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--soft)}
 .stat b{color:var(--ink);font-weight:600}
-
-/* start time */
-.startrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
-.startrow span{font-size:13px;color:var(--muted);font-weight:500}
+.startrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.startrow span{font:600 13px var(--cond);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px}
-.seg button{border:0;background:transparent;color:var(--soft);font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
-
-/* heads up */
-details.heads{background:var(--cautionbg);border-radius:12px;margin:14px 0 4px;padding:0 14px}
-details.heads summary{cursor:pointer;font-weight:600;color:var(--caution);padding:12px 0;list-style:none}
+.seg button{border:0;background:transparent;color:var(--soft);font:600 14px var(--sans);padding:7px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+@media (prefers-color-scheme: dark){.seg button[aria-pressed="true"]{color:#0E1626}}
+details.heads{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--brick);border-radius:12px;margin:16px 0 0;padding:0 16px}
+details.heads summary{cursor:pointer;font:700 17px var(--serif);color:var(--ink);padding:13px 0;list-style:none}
 details.heads summary::-webkit-details-marker{display:none}
-details.heads summary::after{content:"＋";float:right;font-weight:500}
-details.heads[open] summary::after{content:"－"}
-details.heads ul{margin:0 0 14px;padding-left:18px;color:var(--ink)}
+details.heads summary::after{content:"+";float:right;font:500 20px var(--sans);color:var(--brick);line-height:1}
+details.heads[open] summary::after{content:"\2212"}
+details.heads ul{margin:0 0 14px;padding-left:18px;color:var(--soft)}
 details.heads li{margin:0 0 8px}
+details.heads b{color:var(--ink)}
 
-/* map */
-.mapbox{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0 8px;margin:0 -16px}
-#map{height:40vh;min-height:250px;max-height:430px;border-radius:0;transition:height .25s ease}
+/* ---------- map ---------- */
+.mapbox{position:sticky;top:0;z-index:20;background:var(--paper);padding:12px 0 8px;margin:18px -16px 0}
+#map{height:40vh;min-height:250px;max-height:440px;transition:height .25s ease;background:var(--chip)}
 .mapbox.big #map{height:72vh;max-height:none}
-@media (min-width:760px){.mapbox{margin:0}#map{border-radius:14px}}
-.maptools{display:flex;gap:6px;overflow-x:auto;padding:8px 16px 0;scrollbar-width:none}
-@media (min-width:760px){.maptools{padding:8px 0 0}}
+@media (min-width:780px){.mapbox{margin:18px 0 0}#map{border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}}
+.maptools{display:flex;gap:6px;overflow-x:auto;padding:9px 16px 0;scrollbar-width:none}
+@media (min-width:780px){.maptools{padding:9px 0 0}}
 .maptools::-webkit-scrollbar{display:none}
-.tbtn{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12.5px Inter,sans-serif;padding:7px 11px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tbtn{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px var(--cond);letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .tbtn .dot{width:9px;height:9px;border-radius:50%}
-.tbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tbtn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.mapfail{padding:18px;color:var(--soft)}
 
-/* legs + stops */
-.leg{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.leg h2{font-size:22px}
-.leg .bar{width:5px;height:22px;border-radius:3px;align-self:center}
-.leg .meta{font-size:13px;color:var(--muted)}
-.stop{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:13px 14px 12px;margin:0 0 10px;box-shadow:var(--shadow);scroll-margin-top:calc(40vh + 70px)}
+/* medallion pins */
+.pin{position:relative;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font:700 13px var(--serif);display:grid;place-items:center;box-shadow:0 0 0 2px #FFFCF6,0 0 0 3px var(--c),0 3px 8px rgba(0,0,0,.35);cursor:pointer;transition:transform .15s ease,width .15s,height .15s}
+.pin::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid rgba(255,255,255,.45)}
+.pin.sel,.pin:hover{transform:scale(1.22);z-index:5}
+.far .pin{width:14px;height:14px;font-size:0;box-shadow:0 0 0 2px #FFFCF6,0 2px 5px rgba(0,0,0,.35)}
+.far .pin::after{display:none}
+.maplibregl-popup{z-index:6}
+.maplibregl-popup-content{background:var(--card);color:var(--ink);border-radius:14px;padding:8px 8px 10px;font:14px/1.4 var(--sans);box-shadow:0 14px 34px -10px rgba(0,0,0,.5)}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip{border-top-color:var(--card)}
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,.maplibregl-popup-anchor-top-right .maplibregl-popup-tip{border-bottom-color:var(--card)}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip{border-right-color:var(--card)}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip{border-left-color:var(--card)}
+.pop-img{display:block;width:100%;height:116px;object-fit:cover;border-radius:9px;margin-bottom:8px;cursor:zoom-in;background:var(--chip)}
+.pop-t{font:700 15px var(--serif);padding:0 4px}
+.pop-time{color:var(--muted);font-size:13px;padding:0 4px}
+.pop-go{display:inline-block;margin:5px 4px 0;font:600 14px var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--brick);cursor:pointer}
+.hover-pop .pop-go{display:none}
+.maplibregl-ctrl-geolocate{display:none!important}
+.maplibregl-ctrl-attrib{font-size:10px}
+
+/* ---------- legs + stops ---------- */
+.leg{margin:34px 0 14px}
+.leg-k{font:600 13px var(--cond);letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
+.leg h2{font-size:26px;line-height:1.15;margin:3px 0 4px}
+.leg-meta{font-size:13.5px;color:var(--muted);margin-bottom:10px}
+.stop{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 13px;margin:0 0 10px;box-shadow:var(--shadow);scroll-margin-top:calc(40vh + 80px);overflow:hidden}
 .stop.hl{outline:2px solid var(--c);outline-offset:2px}
-.stop.done{opacity:.62}
-.shead{display:flex;gap:11px;align-items:flex-start;cursor:pointer}
-.num{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font:700 13px Inter,sans-serif;display:grid;place-items:center;margin-top:1px}
+.stop.done{opacity:.6}
+.ph{position:relative;margin:-14px -14px 13px;aspect-ratio:16/9;max-height:300px;width:calc(100% + 28px);overflow:hidden;cursor:zoom-in;background:var(--chip);border-bottom:4px solid var(--c)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.ph:hover img{transform:scale(1.03)}
+.ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 8px;font:italic 400 13.5px var(--serif);color:#fff;background:linear-gradient(transparent,rgba(10,18,36,.72))}
+.shead{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.num{flex:0 0 auto;position:relative;width:32px;height:32px;border-radius:50%;background:var(--c);color:#fff;font:700 14px var(--serif);display:grid;place-items:center;margin-top:1px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+@media (prefers-color-scheme: dark){.num{color:#0E1626}}
 .stitle{flex:1;min-width:0}
-.time{font-size:12.5px;font-weight:600;color:var(--c);letter-spacing:.02em}
-.stop h3{font-size:18.5px;line-height:1.2;margin-top:1px}
-.addr{font-size:13px;color:var(--muted);margin-top:2px}
-.chk{flex:0 0 auto;width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:transparent;color:transparent;cursor:pointer;font-size:16px;display:grid;place-items:center}
-.stop.done .chk{background:var(--green);border-color:var(--green);color:#fff}
-.body{margin:9px 0 0 39px;color:var(--soft)}
-.body p{margin:0 0 7px}
-.tip{background:var(--chip);border-radius:9px;padding:8px 10px;font-size:14px;margin:8px 0 0;color:var(--ink)}
+.time{font:600 14px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.stop h3{font-size:20px;line-height:1.2;margin-top:1px}
+.addr{font-size:13px;color:var(--muted);margin-top:3px}
+.chk{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:transparent;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.stop.done .chk{background:var(--patina);border-color:var(--patina);color:#fff}
+.body{margin:10px 0 0 44px;color:var(--soft)}
+.body p{margin:0 0 8px}
+.body i{font-family:var(--serif)}
+.tip{background:var(--chip);border-radius:10px;padding:9px 11px;font-size:14px;margin:8px 0 0;color:var(--ink)}
 .tip b{font-weight:600}
-.hours{font-size:13px;color:var(--muted);margin-top:7px}
-.flag{border-radius:9px;padding:7px 10px;font-size:13.5px;font-weight:500;margin-top:8px}
+.hours{font-size:13px;color:var(--muted);margin-top:8px}
+.flag{border-radius:10px;padding:8px 11px;font-size:13.5px;font-weight:500;margin-top:8px}
 .flag.closed{background:var(--warnbg);color:var(--warn)}
 .flag.soon{background:var(--cautionbg);color:var(--caution)}
-.flag.ok{background:var(--okbg);color:var(--green)}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0 39px}
-.act{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 13px Inter,sans-serif;padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.flag.ok{background:var(--okbg);color:var(--patina)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0 0 44px}
+.act{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px var(--cond);letter-spacing:.08em;text-transform:uppercase;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
 .act.primary{background:var(--c);border-color:var(--c);color:#fff}
-.dur{display:inline-block;font-size:12px;font-weight:600;color:var(--muted);background:var(--chip);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
-.walkto{font-size:12.5px;color:var(--muted);margin:-4px 0 8px 18px;display:flex;align-items:center;gap:6px}
-.walkto::before{content:"";width:2px;height:14px;background:var(--line);border-radius:2px}
-.sunset{display:flex;align-items:center;gap:10px;margin:4px 0 12px;color:var(--gold);font-size:13px;font-weight:600}
-.sunset::before,.sunset::after{content:"";flex:1;height:1px;background:var(--gold);opacity:.45}
-.bye{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--brick);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:2px}
-footer{color:var(--muted);font-size:12.5px;padding:24px 0 40px;border-top:1px solid var(--line);margin-top:26px}
+@media (prefers-color-scheme: dark){.act.primary{color:#0E1626}}
+.dur{display:inline-block;font:600 12px var(--sans);letter-spacing:0;text-transform:none;color:var(--muted);background:var(--chip);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+.walkto{font-size:12.5px;color:var(--muted);margin:-3px 0 7px 29px;display:flex;align-items:center;gap:8px}
+.walkto::before{content:"";width:2px;height:16px;background:repeating-linear-gradient(var(--c) 0 3px,transparent 3px 6px);border-radius:2px}
+.sunset{display:flex;align-items:center;gap:10px;margin:8px 0 14px;color:var(--gold);font:600 14px var(--cond);letter-spacing:.14em;text-transform:uppercase}
+.sunset::before,.sunset::after{content:"";flex:1;height:1px;background:var(--gold);opacity:.5}
+.bye{display:inline-block;font:600 12px var(--cond);letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--brick);border-radius:6px;padding:2px 8px;margin-left:8px;vertical-align:3px}
+footer{color:var(--muted);font-size:12.5px;padding:24px 0 48px;margin-top:30px}
+footer .sig{font:italic 400 17px var(--serif);color:var(--ink);margin:16px 0 8px}
+footer details{margin-top:12px}
+footer summary{cursor:pointer;font-weight:600;color:var(--soft)}
+footer ol{padding-left:20px;margin:8px 0 0}
+footer li{margin-bottom:3px}
 
-/* leaflet bits */
-.pin{width:26px;height:26px;border-radius:50%;color:#fff;font:700 12px Inter,sans-serif;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
-.pin.sel{transform:scale(1.25)}
-.me{width:16px;height:16px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25)}
-.leaflet-popup-content{font:14px/1.4 Inter,sans-serif;margin:10px 12px}
-.leaflet-popup-content b{font-family:Fraunces,Georgia,serif;font-size:15px}
-.pop-go{display:inline-block;margin-top:6px;font-weight:600;color:#2A4A73;cursor:pointer;text-decoration:underline}
-:root[data-theme="dark"] .leaflet-tile-pane{filter:brightness(.82) saturate(.85)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .leaflet-tile-pane{filter:brightness(.82) saturate(.85)}}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:2000;background:rgba(8,12,22,.93);display:grid;place-items:center;padding:20px;cursor:zoom-out;opacity:0;transition:opacity .2s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb figure{margin:0;max-width:min(1000px,100%)}
+.lb img{display:block;max-width:100%;max-height:80vh;margin:0 auto;border-radius:10px}
+.lb figcaption{color:#F4EEE3;font:italic 15px var(--serif);text-align:center;margin-top:10px}
+.lb figcaption small{display:block;font:12px var(--sans);font-style:normal;opacity:.65;margin-top:3px}
+.lb-x{position:absolute;top:12px;right:14px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:22px;width:40px;height:40px;border-radius:50%;cursor:pointer}
+
+/* scroll reveal (from the Aspen page) */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .scrolldown span{animation:none}
+  .ph img{transition:none}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
+<div class="progress" id="progress"></div>
+
+<header class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"><div class="sun"></div></div>
+  <div class="hero-inner" id="heroInner">
     <div class="eyebrow">Tuesday · November 3</div>
-    <h1>A Boston Afternoon</h1>
-    <p class="sub">Northeastern to the North End: shopping on Newbury, bookstores and authors' houses on Beacon Hill, then the Common, Chinatown and cannoli.</p>
-    <div class="stats">
-      <div class="stat"><b>~5.8 mi</b> walking</div>
-      <div class="stat"><b>1</b> short T ride</div>
-      <div class="stat">Sunset <b>4:31 PM</b></div>
-      <div class="stat">Done by <b id="endTime">~6:00</b></div>
+    <h1>A Boston<br>Afternoon</h1>
+    <p class="lede">From Huntington Avenue to Hanover Street: brownstones, bookshops, cobblestones &amp; cannoli.</p>
+  </div>
+  <div class="skyline" aria-hidden="true">
+    <svg class="sk-back" data-speed="0.30" viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice">
+      <path d="M200,360V250H260V360ZM300,360V235H340V360ZM380,360V200H420V360ZM430,360V230H470V360ZM485,360V180H515V360Z
+        M545,360V70L553,61H590V360Z
+        M615,360V105H620V98H655V105H660V360ZM635,98V52H639V98Z
+        M675,360V160H705V360Z
+        M845,360V150H851V120H849L865,88L881,120H879V150H885V360ZM864,88V68H866V88Z
+        M905,360V175H945V360ZM955,360V205H990V360ZM1040,360V190H1075V360ZM1100,360V220H1140V360ZM1180,360V240H1230V360Z
+        M1268,360L1275,170L1282,360ZM1398,360L1405,176L1412,360ZM1235,302H1440V308H1235Z
+        M0,360V262H40V250H90V270H150V256H200V360Z"/>
+      <path class="cables" d="M1275,176L1238,302M1275,176L1250,302M1275,176L1262,302M1275,176L1290,302M1275,176L1305,302M1275,176L1322,302M1405,182L1356,302M1405,182L1372,302M1405,182L1388,302M1405,182L1422,302M1405,182L1438,302"/>
+    </svg>
+    <svg class="sk-mid" data-speed="0.17" viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice">
+      <path d="M0,360V290H60V276H66V268H72V276H130V288H190V270H250V284H262V274H268V284H320V278H380V290H440V272H500V286H560V276H620V288H640V360Z
+        M640,360V250H680L720,232L760,250H800V360ZM700,232V214H740V232ZM715,176V160H725V176ZM718,160L720,148L722,160Z
+        M800,360V284H852V360ZM852,360V215H855V195H857V180L862,118L867,180V195H869V215H872V360Z
+        M872,360V280H930V268H936V260H942V268H990V286H1050V274H1110V290H1170V276H1230V286H1290V270H1350V284H1440V360Z"/>
+      <path class="dome" d="M700,214C700,186 708,177 720,175C732,177 740,186 740,214Z"/>
+    </svg>
+    <svg class="sk-front" data-speed="0.06" viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice">
+      <defs><filter id="lampblur" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="5"/></filter></defs>
+      <path d="M0,360V318H50V300H56V292H62V300H110V314H170V296H230V310H290V298H296V290H302V298H350V316H410V302H470V312H530V296H590V308H650V300H710V314H770V298H776V290H782V298H830V310H886V250H889V226H892V208H895V196L900,138L905,196V208H908V226H911V250H914V306H970V296H1030V312H1090V298H1096V290H1102V298H1150V314H1210V300H1270V310H1330V296H1390V308H1440V360Z
+        M129,360V328H131V360ZM124,328L126,316H134L136,328ZM126,316L130,311L134,316Z
+        M469,360V330H471V360ZM464,330L466,318H474L476,330ZM466,318L470,313L474,318Z
+        M599,360V330H601V360ZM594,330L596,318H604L606,330ZM596,318L600,313L604,318Z
+        M1059,360V330H1061V360ZM1054,330L1056,318H1064L1066,330ZM1056,318L1060,313L1064,318Z
+        M1329,360V330H1331V360ZM1324,330L1326,318H1334L1336,330ZM1326,318L1330,313L1334,318Z"/>
+      <circle class="glow" cx="130" cy="322" r="12"/><circle class="glow" cx="470" cy="324" r="11"/><circle class="glow" cx="600" cy="324" r="11"/><circle class="glow" cx="1060" cy="324" r="11"/><circle class="glow" cx="1330" cy="324" r="11"/>
+      <g class="win"><rect x="18" y="330" width="6" height="9"/><rect x="34" y="330" width="6" height="9"/><rect x="186" y="314" width="6" height="9"/><rect x="204" y="314" width="6" height="9"/><rect x="366" y="332" width="6" height="9"/><rect x="545" y="314" width="6" height="9"/><rect x="563" y="314" width="6" height="9"/><rect x="666" y="318" width="6" height="9"/><rect x="684" y="318" width="6" height="9"/><rect x="845" y="326" width="6" height="9"/><rect x="985" y="314" width="6" height="9"/><rect x="1003" y="314" width="6" height="9"/><rect x="1165" y="330" width="6" height="9"/><rect x="1285" y="326" width="6" height="9"/><rect x="1405" y="326" width="6" height="9"/></g>
+    </svg>
+  </div>
+  <div class="scrolldown" id="scrolldown">Scroll<span>↓</span></div>
+</header>
+<div class="bricks"></div>
+
+<div class="wrap intro reveal">
+  <div class="stats">
+    <div class="stat"><b>~5.8 mi</b> walking</div>
+    <div class="stat"><b>1</b> short T ride</div>
+    <div class="stat">Sunset <b>4:31 PM</b></div>
+    <div class="stat">Done by <b id="endTime">~6:00</b></div>
+  </div>
+  <div class="startrow">
+    <span>Starting at</span>
+    <div class="seg" id="startSeg">
+      <button data-start="720" aria-pressed="true">12:00</button>
+      <button data-start="750" aria-pressed="false">12:30</button>
+      <button data-start="780" aria-pressed="false">1:00</button>
     </div>
-    <div class="startrow">
-      <span>Starting at</span>
-      <div class="seg" id="startSeg">
-        <button data-start="720" aria-pressed="true">12:00</button>
-        <button data-start="750" aria-pressed="false">12:30</button>
-        <button data-start="780" aria-pressed="false">1:00</button>
-      </div>
-    </div>
-    <details class="heads">
-      <summary>Read this first · timing &amp; tips</summary>
-      <ul>
-        <li><b>Sunset is about 4:31.</b> Beacon Hill and the Common happen in daylight. You'll reach Chinatown around dusk and the North End after dark. Hanover St is busy and well lit at night.</li>
-        <li><b>Paul Revere House closes at 4:15 and Old North Church at 5:00</b>, so at this pace you'll probably see both from outside. If you want to go inside Old North: after the Common, take the <b>Green Line from Park Street to Haymarket</b> (2 stops), do the North End first, then take the <b>Orange Line from Haymarket back to Chinatown</b> for dinner.</li>
-        <li><b>Running behind?</b> Skip Copp's Hill first, then the Pinckney St houses. To skip Chinatown entirely, take the Green Line from Park Street straight to Haymarket.</li>
-        <li><b>T fare:</b> tap a contactless credit card or your phone at the gate ($2.40). Bring a little cash for bakeries.</li>
-        <li><b>Wear good shoes.</b> Acorn St is cobblestone and Beacon Hill's sidewalks are uneven brick.</li>
-        <li>Tap <b>◎ Me</b> on the map to see where you are. Tap a stop's card to find it on the map, and the ✓ to check it off.</li>
-      </ul>
-    </details>
-  </header>
+  </div>
+  <details class="heads">
+    <summary>Read this first · timing &amp; tips</summary>
+    <ul>
+      <li><b>Sunset is about 4:31.</b> Beacon Hill and the Common happen in daylight. You'll reach Chinatown around dusk and the North End after dark. Hanover St is busy and well lit at night.</li>
+      <li><b>Paul Revere House closes at 4:15 and Old North Church at 5:00</b>, so at this pace you'll probably see both from outside. If you want to go inside Old North: after the Common, take the <b>Green Line from Park Street to Haymarket</b> (2 stops), do the North End first, then take the <b>Orange Line from Haymarket back to Chinatown</b> for dinner.</li>
+      <li><b>Running behind?</b> Skip Copp's Hill first, then the Pinckney St houses. To skip Chinatown entirely, take the Green Line from Park Street straight to Haymarket.</li>
+      <li><b>T fare:</b> tap a contactless credit card or your phone at the gate ($2.40). Bring a little cash for bakeries.</li>
+      <li><b>Wear good shoes.</b> Acorn St is cobblestone and Beacon Hill's sidewalks are uneven brick.</li>
+      <li>Tap <b>◎ Me</b> on the map to see where you are. Tap a pin to see a photo of the stop, tap a card to find it on the map, and tap the ✓ to check it off.</li>
+    </ul>
+  </details>
 </div>
 
 <div class="wrap">
@@ -165,105 +273,117 @@ footer{color:var(--muted);font-size:12.5px;padding:24px 0 40px;border-top:1px so
     <div class="maptools" id="maptools">
       <button class="tbtn" id="btnMe" type="button">◎ Me</button>
       <button class="tbtn" id="btnAll" type="button">Whole route</button>
-      <button class="tbtn" id="btnBig" type="button">⤢ Bigger map</button>
+      <button class="tbtn" id="btnBig" type="button">⤢ Bigger</button>
     </div>
   </div>
   <main id="list"></main>
   <footer>
-    Times are estimates at a relaxed strolling pace. Store hours come from the stores' own sites or OpenStreetMap, so check before you go out of your way. Map tiles © Esri. Walking routes from OSRM using OpenStreetMap data.
+    <div class="bricks sm"></div>
+    <p class="sig">Have the best afternoon. — Griffin</p>
+    Times are estimates at a relaxed strolling pace. Store hours come from the stores' own sites or OpenStreetMap, so check before you go out of your way. Map © OpenFreeMap, OpenMapTiles, OpenStreetMap contributors. Walking routes from OSRM.
+    <details><summary>Photo credits (Wikimedia Commons)</summary><ol>__CREDITS__</ol></details>
   </footer>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div class="lb" id="lb" hidden><button class="lb-x" type="button" aria-label="Close photo">×</button><figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure></div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
 var ROUTES = __ROUTES__;
+var CREDITS = __CREDITJSON__;
 
 var LEGS = [
-  {id:'griffin',  name:'With Griffin',                 c:'--brick',  note:'Northeastern → Newbury → Comm Ave'},
-  {id:'hill',     name:'Public Garden & Beacon Hill',  c:'--navy',   note:'bookstore, vintage, authors’ houses'},
-  {id:'common',   name:'The Common & Chinatown',       c:'--green',  note:'down the hill to Beach St'},
-  {id:'t',        name:'The shortcut',                 c:'--orange', note:'Orange Line, 3 stops'},
-  {id:'northend', name:'The North End',                c:'--gold',   note:'Revere, Old North, cannoli'}
+  {id:'griffin',  k:'Part I · Together',     name:'With Griffin',                c:'--brick',  note:'Northeastern → Newbury → Comm Ave'},
+  {id:'hill',     k:'Part II · On your own', name:'Public Garden & Beacon Hill', c:'--navy',   note:'bookstore, vintage, authors’ houses'},
+  {id:'common',   k:'Part III',              name:'The Common & Chinatown',      c:'--patina', note:'down the hill to Beach St'},
+  {id:'t',        k:'Shortcut',              name:'The Orange Line',             c:'--orange', note:'3 stops to Haymarket'},
+  {id:'northend', k:'Part IV',               name:'The North End',               c:'--gold',   note:'Revere, Old North, cannoli'}
 ];
 
 // walk = minutes walking to reach this stop, dur = minutes spent there, close = closing time (minutes after midnight)
+// cap = photo caption (photo is img/s<index>.jpg), pos = object-position for portraits
 var STOPS = [
-  {leg:'griffin', ll:[42.340125,-71.088324], walk:0, dur:30, name:'Northeastern University', addr:'Krentzman Quad · 360 Huntington Ave',
+  {leg:'griffin', ll:[42.340125,-71.088324], walk:0, dur:30, name:'Northeastern University', addr:'Krentzman Quad · 360 Huntington Ave', cap:'Centennial Common, Northeastern',
    body:['Start with Griffin’s campus tour: Krentzman Quad, Centennial Common, Snell Library, and his favorite spots.']},
-  {leg:'griffin', ll:[42.348298,-71.086637], walk:15, dur:60, name:'Newbury Street', addr:'Mass Ave → Berkeley St',
+  {leg:'griffin', ll:[42.348298,-71.086637], walk:15, dur:60, name:'Newbury Street', addr:'Mass Ave → Berkeley St', cap:'Newbury Street brownstones',
    body:['Eight blocks of shops in 1880s brownstones. Many are down a few steps or up a stoop, so look up and down, not just ahead. The Mass Ave end is younger and quirkier, and it gets more polished (boutiques, galleries, salons) toward the Public Garden.',
          'On the way, Mass Ave takes you past Symphony Hall and the long reflecting pool at Christian Science Plaza.'],
    tip:'<b>Know where you are:</b> the cross streets go in alphabetical order. Hereford, Gloucester, Fairfield, Exeter, Dartmouth, Clarendon, Berkeley, Arlington. <b>Trident Booksellers &amp; Café</b> (338 Newbury) is right at the start.'},
-  {leg:'griffin', ll:[42.352870,-71.073840], walk:2, dur:8, name:'Commonwealth Avenue Mall', addr:'Berkeley St → Arlington St',
+  {leg:'griffin', ll:[42.352870,-71.073840], walk:2, dur:8, name:'Commonwealth Avenue Mall', addr:'Berkeley St → Arlington St', cap:'The Commonwealth Avenue Mall',
    body:['Turn up Berkeley St one block to the mall, the tree-lined promenade down the middle of Comm Ave. It’s the first link of Olmsted’s Emerald Necklace of parks. Walk toward the Public Garden past the 1865 Alexander Hamilton statue.']},
-  {leg:'griffin', ll:[42.353848,-71.070949], walk:1, dur:4, name:'Public Garden gate', addr:'George Washington statue · Arlington St', bye:true,
+  {leg:'griffin', ll:[42.353848,-71.070949], walk:1, dur:4, name:'Public Garden gate', addr:'George Washington statue · Arlington St', bye:true, cap:'Thomas Ball’s Washington (1869)',
    body:['Griffin heads off here. The 1869 equestrian Washington faces straight down Comm Ave. From here on, you’re on your own.']},
 
-  {leg:'hill', ll:[42.354125,-71.069915], walk:1, dur:8, name:'Public Garden & the lagoon bridge', addr:'Public Garden',
+  {leg:'hill', ll:[42.354125,-71.069915], walk:1, dur:8, name:'Public Garden & the lagoon bridge', addr:'Public Garden', cap:'The lagoon footbridge',
    body:['America’s first public botanical garden (1837). The little 1867 footbridge over the lagoon is often called the world’s smallest suspension bridge. Stop in the middle for the view both ways.',
          'The Swan Boats are put away for the season (they run spring to September).']},
-  {leg:'hill', ll:[42.355519,-71.069750], walk:3, dur:5, name:'Make Way for Ducklings', addr:'Near Charles & Beacon St corner',
+  {leg:'hill', ll:[42.355519,-71.069750], walk:3, dur:5, name:'Make Way for Ducklings', addr:'Near Charles & Beacon St corner', cap:'The Ducklings, dressed for winter',
    body:['Mrs. Mallard and her eight ducklings in bronze, by Nancy Schön (1987), from Robert McCloskey’s 1941 book set right here. Everyone takes the photo, and so should you.']},
-  {leg:'hill', ll:[42.358183,-71.070318], walk:4, dur:20, close:21*60, closeLbl:'9 PM', name:'Beacon Hill Books & Café', addr:'71 Charles St',
+  {leg:'hill', ll:[42.358183,-71.070318], walk:4, dur:20, close:21*60, closeLbl:'9 PM', name:'Beacon Hill Books & Café', addr:'71 Charles St', cap:'A Beacon Hill townhouse. The bookstore fills one just like it.',
    body:['The bookstore everyone talks about: an independent shop that fills a 19th-century Charles Street townhouse room after room, floor after floor, with a café inside.'],
    hours:'Tuesday 8 AM – 9 PM'},
-  {leg:'hill', ll:[42.358674,-71.070859], walk:1, dur:20, close:17*60, closeLbl:'5 PM', name:'Vintage on Charles St', addr:'Vintage Taste · 100 Charles  ·  Covet · 109 Charles',
+  {leg:'hill', ll:[42.358674,-71.070859], walk:1, dur:20, close:17*60, closeLbl:'5 PM', name:'Vintage on Charles St', addr:'Vintage Taste · 100 Charles  ·  Covet · 109 Charles', cap:'Charles Street, Beacon Hill’s main street',
    body:['Two secondhand shops a few doors apart: <b>Vintage Taste</b> for vintage clothing and accessories, and <b>Covet</b> for designer consignment. The rest of Charles St is antiques and boutiques, so browse the windows as you go.'],
    hours:'Vintage Taste Mon–Sat 11–5 · Covet Mon–Sat 10–7 (posted hours, worth a quick check)'},
-  {leg:'hill', ll:[42.357620,-71.068837], walk:4, dur:5, name:'Acorn Street', addr:'Between West Cedar & Willow St',
+  {leg:'hill', ll:[42.357620,-71.068837], walk:4, dur:5, name:'Acorn Street', addr:'Between West Cedar & Willow St', cap:'Acorn Street’s cobblestones',
    body:['Often called the most photographed street in America: a narrow cobblestone lane from the 1820s, once home to the coachmen and servants of the grand houses nearby.'],
    tip:'The stones are uneven, so watch your footing.'},
-  {leg:'hill', ll:[42.357708,-71.068267], walk:1, dur:2, name:'Sylvia Plath’s apartment', addr:'9 Willow St',
+  {leg:'hill', ll:[42.357708,-71.068267], walk:1, dur:2, name:'Sylvia Plath’s apartment', addr:'9 Willow St', cap:'Willow Street, in an old sketch',
    body:['Sylvia Plath and Ted Hughes lived here in 1958–59, while she sat in on Robert Lowell’s poetry seminar at BU.']},
-  {leg:'hill', ll:[42.358444,-71.068764], walk:1, dur:5, name:'Louisburg Square', addr:'Louisa May Alcott · No. 10',
+  {leg:'hill', ll:[42.358444,-71.068764], walk:1, dur:5, name:'Louisburg Square', addr:'Louisa May Alcott · No. 10', cap:'Louisburg Square',
    body:['The most coveted address on the Hill: bowfront houses around a private, fenced green (only residents have keys). Louisa May Alcott, author of <i>Little Women</i>, lived at No. 10 in the last years of her life.']},
-  {leg:'hill', ll:[42.358751,-71.067376], walk:2, dur:1, name:'Nathaniel Hawthorne', addr:'54 Pinckney St',
+  {leg:'hill', ll:[42.358751,-71.067376], walk:2, dur:1, name:'Nathaniel Hawthorne', addr:'54 Pinckney St', cap:'Hawthorne, photographed by Mathew Brady in the 1860s', pos:'50% 22%',
    body:['Hawthorne lived here around 1840 while working at the Boston Custom House, about ten years before <i>The Scarlet Letter</i>.']},
-  {leg:'hill', ll:[42.358754,-71.065972], walk:1, dur:2, name:'The young Alcotts', addr:'20 Pinckney St',
+  {leg:'hill', ll:[42.358754,-71.065972], walk:1, dur:2, name:'The young Alcotts', addr:'20 Pinckney St', cap:'Louisa May Alcott, about 1870', pos:'50% 25%',
    body:['The Alcott family’s home in the early 1850s, when Louisa was about 20 and writing to help pay the bills. Thoreau is linked to No. 4, a few doors up.']},
-  {leg:'hill', ll:[42.358602,-71.063875], walk:5, dur:8, name:'State House & the Shaw Memorial', addr:'Beacon St at Park St',
+  {leg:'hill', ll:[42.358602,-71.063875], walk:5, dur:8, name:'State House & the Shaw Memorial', addr:'Beacon St at Park St', cap:'The State House and its gold dome',
    body:['Charles Bulfinch’s 1798 State House, with its gold-leaf dome. Directly across Beacon St is Augustus Saint-Gaudens’ memorial (1897) to Robert Gould Shaw and the 54th Massachusetts, one of the first Black regiments of the Civil War. It’s the story behind the film <i>Glory</i>.']},
 
-  {leg:'common', ll:[42.356090,-71.065714], walk:7, dur:12, name:'Boston Common', addr:'Frog Pond · Parkman Bandstand',
+  {leg:'common', ll:[42.356090,-71.065714], walk:7, dur:12, name:'Boston Common', addr:'Frog Pond · Parkman Bandstand', cap:'The Common from above, with the Parkman Bandstand',
    body:['The oldest public park in the country (1634), once a cow pasture and militia training ground. Head down the hill past the Frog Pond (an ice rink in winter) and the bandstand toward the corner of Boylston and Tremont.']},
-  {leg:'common', ll:[42.351477,-71.060602], walk:11, dur:15, name:'Chinatown · Beach Street', addr:'Ho Yuen Bakery · 54 Beach St',
+  {leg:'common', ll:[42.351477,-71.060602], walk:11, dur:15, name:'Chinatown · Beach Street', addr:'Ho Yuen Bakery · 54 Beach St', cap:'Chinatown’s side streets',
    body:['Follow Boylston and Washington St into Chinatown. Beach St is the main drag, packed with bakeries, tea shops and restaurants.'],
    tip:'<b>Snack stop:</b> Ho Yuen Bakery is known for its egg tarts. For bubble tea, you’ll pass plenty of shops on Beach St and Harrison Ave.'},
-  {leg:'common', ll:[42.351189,-71.059752], walk:1, dur:5, name:'Chinatown Gate', addr:'Beach St at Surface Rd',
+  {leg:'common', ll:[42.351189,-71.059752], walk:1, dur:5, name:'Chinatown Gate', addr:'Beach St at Surface Rd', cap:'The Chinatown Gate',
    body:['The paifang gate was a gift from Taiwan in 1982 and is guarded by stone foo lions. The inscription 天下為公 means “everything under heaven is for the people.”']},
 
-  {leg:'t', ll:[42.352217,-71.062607], walk:4, dur:15, name:'Orange Line → Haymarket', addr:'Chinatown station · Washington St at Essex', transit:[42.362094,-71.057926],
+  {leg:'t', ll:[42.352217,-71.062607], walk:4, dur:15, name:'Orange Line → Haymarket', addr:'Chinatown station · Washington St at Essex', transit:[42.362094,-71.057926], cap:'An Orange Line train at Haymarket',
    body:['Your shortcut. Take the Orange Line toward <b>Oak Grove</b> three stops (Downtown Crossing, State, Haymarket), about 6 minutes of riding.'],
    tip:'<b>Fare:</b> tap a contactless card or phone at the gate ($2.40). Some entrances serve only one direction, so check that the sign says Oak Grove. <b>Rather walk?</b> It’s 25–30 min via Downtown Crossing, the Old State House and Faneuil Hall (dotted line on the map).'},
 
-  {leg:'northend', ll:[42.363738,-71.053683], walk:7, dur:5, close:16*60+15, closeLbl:'4:15', name:'Paul Revere House', addr:'19 North Square',
+  {leg:'northend', ll:[42.363738,-71.053683], walk:7, dur:5, close:16*60+15, closeLbl:'4:15', name:'Paul Revere House', addr:'19 North Square', cap:'The Paul Revere House, built around 1680',
    body:['From Haymarket, cross the Greenway and wind into the North End. Built around 1680, this is the oldest house in downtown Boston. Paul Revere lived here when he set out on his midnight ride in 1775.'],
    hours:'Daily 10 AM – 4:15 PM (winter hours)'},
-  {leg:'northend', ll:[42.365760,-71.053634], walk:4, dur:5, name:'Paul Revere Mall', addr:'“The Prado” · Hanover St',
+  {leg:'northend', ll:[42.365760,-71.053634], walk:4, dur:5, name:'Paul Revere Mall', addr:'“The Prado” · Hanover St', cap:'Revere on horseback, with the Old North steeple',
    body:['A brick plaza with Cyrus Dallin’s statue of Revere on horseback, framed by the Old North steeple behind it. Especially lovely at dusk.']},
-  {leg:'northend', ll:[42.366316,-71.054448], walk:2, dur:10, close:17*60, closeLbl:'5:00', name:'Old North Church', addr:'193 Salem St',
+  {leg:'northend', ll:[42.366316,-71.054448], walk:2, dur:10, close:17*60, closeLbl:'5:00', name:'Old North Church', addr:'193 Salem St', cap:'Old North Church',
    body:['Boston’s oldest standing church (1723). On April 18, 1775, two lanterns hung in this steeple signaled that the British were coming by sea: “one if by land, two if by sea.”'],
    hours:'Tue–Sat 10 AM – 5 PM · small admission'},
-  {leg:'northend', ll:[42.367366,-71.055912], walk:4, dur:8, optional:true, name:'Copp’s Hill Burying Ground', addr:'Hull St · optional',
+  {leg:'northend', ll:[42.367366,-71.055912], walk:4, dur:8, optional:true, name:'Copp’s Hill Burying Ground', addr:'Hull St · optional', cap:'Copp’s Hill Burying Ground',
    body:['Boston’s second-oldest cemetery (1659), up on the hill with a view across the harbor to Charlestown and the USS Constitution. If the gates are shut after dark, look through the fence.']},
-  {leg:'northend', ll:[42.364188,-71.054241], walk:8, dur:20, name:'Cannoli on Hanover St', addr:'Mike’s · 300 Hanover  ·  Modern · 257 Hanover',
+  {leg:'northend', ll:[42.364188,-71.054241], walk:8, dur:20, name:'Cannoli on Hanover St', addr:'Mike’s · 300 Hanover  ·  Modern · 257 Hanover', cap:'Mike’s Pastry on Hanover Street',
    body:['The great debate. <b>Mike’s Pastry</b> is the famous one, with the white boxes and the line. <b>Modern Pastry</b>, a block down, fills each cannoli to order and is the locals’ pick. Try both and decide for yourselves.'],
    tip:'Bring cash just in case. Hanover St is lined with trattorias if you want to stay for dinner.'},
-  {leg:'northend', ll:[42.362094,-71.057926], walk:5, dur:0, name:'Finish · Haymarket', addr:'Orange & Green Lines',
+  {leg:'northend', ll:[42.362094,-71.057926], walk:5, dur:0, name:'Finish · Haymarket', addr:'Orange & Green Lines', cap:'Haymarket’s pushcart market (Fridays and Saturdays)',
    body:['You did it. Haymarket station is just back across the Greenway, and North Station is about a 10-minute walk if you need the commuter rail.']}
 ];
 
 var SUNSET = 16*60+31;
 var T_LINE = [[42.352217,-71.062607],[42.355489,-71.060441],[42.358804,-71.057772],[42.362094,-71.057926]];
+var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+var darkMQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function legOf(id){for(var i=0;i<LEGS.length;i++){if(LEGS[i].id===id)return LEGS[i];}}
 function fmt(m){m=Math.round(m);var h=Math.floor(m/60),mm=m%60,ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+' '+ap;}
-function fmtShort(m){return fmt(m).replace(' PM','').replace(' AM','');}
 function gmaps(s){
   if(s.transit){return 'https://www.google.com/maps/dir/?api=1&destination='+s.transit[0]+','+s.transit[1]+'&travelmode=transit';}
   return 'https://www.google.com/maps/dir/?api=1&destination='+s.ll[0]+','+s.ll[1]+'&travelmode=walking';
 }
+function lngLat(ll){return [ll[1],ll[0]];}
+function photo(i){return 'img/s'+i+'.jpg';}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
 
 var done={};
 try{done=JSON.parse(localStorage.getItem('bw-done')||'{}')||{};}catch(e){done={};}
@@ -272,38 +392,65 @@ function saveDone(){try{localStorage.setItem('bw-done',JSON.stringify(done));}ca
 var start=720;
 try{var s0=parseInt(localStorage.getItem('bw-start'),10);if(s0===720||s0===750||s0===780){start=s0;}}catch(e){}
 
+/* ---------- lightbox ---------- */
+var lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg'), lbCap=document.getElementById('lbCap');
+function openPhoto(i){
+  var s=STOPS[i], c=CREDITS[i];
+  lbImg.src=photo(i); lbImg.alt=s.cap;
+  lbCap.innerHTML=esc(s.cap)+(c?'<small>Photo: '+esc(c.artist||'Wikimedia Commons')+' · '+esc(c.license)+'</small>':'');
+  lb.hidden=false; requestAnimationFrame(function(){lb.classList.add('on');});
+}
+function closePhoto(){lb.classList.remove('on');setTimeout(function(){lb.hidden=true;lbImg.removeAttribute('src');},200);}
+lb.addEventListener('click',closePhoto);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!lb.hidden)closePhoto();});
+
+/* ---------- scroll reveal ---------- */
+var rev = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+  es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');rev.unobserve(en.target);}});
+},{rootMargin:'0px 0px -6% 0px'}) : null;
+function observeReveals(root,instant){
+  [].forEach.call(root.querySelectorAll('.reveal:not(.in)'),function(el){
+    if(instant||!rev||reduceMotion){el.classList.add('in');}else{rev.observe(el);}
+  });
+}
+
 /* ---------- list ---------- */
-var list=document.getElementById('list');
+var list=document.getElementById('list'), rendered=false;
 function render(){
   var t=start, html='', curLeg=null, sunsetShown=false;
   STOPS.forEach(function(s,i){
     t+=s.walk; s.arrive=t; s.leave=t+s.dur; t=s.leave;
+    var L=legOf(s.leg);
     if(s.leg!==curLeg){
-      curLeg=s.leg; var L=legOf(s.leg), r=ROUTES[s.leg];
+      curLeg=s.leg; var r=ROUTES[s.leg];
       var meta=L.note+(r?' · '+(r.m/1609.34).toFixed(1)+' mi':'');
-      html+='<div class="leg" style="--c:var('+L.c+')"><span class="bar" style="background:var('+L.c+')"></span><h2>'+L.name+'</h2><span class="meta">'+meta+'</span></div>';
+      html+='<div class="leg reveal" style="--c:var('+L.c+')"><div class="leg-k">'+L.k+'</div><h2>'+L.name+'</h2><div class="leg-meta">'+meta+'</div><div class="bricks sm"></div></div>';
     }
-    if(!sunsetShown && s.arrive>=SUNSET){sunsetShown=true;html+='<div class="sunset">☀ Sunset · 4:31 PM</div>';}
-    if(s.walk>0 && i>0 && STOPS[i-1].leg===s.leg){html+='<div class="walkto">'+s.walk+' min walk</div>';}
-    var L2=legOf(s.leg), flag='';
+    if(!sunsetShown && s.arrive>=SUNSET){sunsetShown=true;html+='<div class="sunset">☀ Sunset over the Charles · 4:31</div>';}
+    if(s.walk>0 && i>0 && STOPS[i-1].leg===s.leg){html+='<div class="walkto" style="--c:var('+L.c+')">'+s.walk+' min walk</div>';}
+    var flag='';
     if(s.close){
       if(s.arrive>=s.close){flag='<div class="flag closed">Closes at '+s.closeLbl+', before you get here ('+fmt(s.arrive)+'). See it from outside, or see the swap tip at the top.</div>';}
       else if(s.close-s.arrive<=25){flag='<div class="flag soon">Closes at '+s.closeLbl+'. Go straight in.</div>';}
       else if(s.close<21*60){flag='<div class="flag ok">Open until '+s.closeLbl+'. You’re in good shape.</div>';}
     }
-    html+='<article class="stop'+(done[i]?' done':'')+'" id="s'+i+'" data-i="'+i+'" style="--c:var('+L2.c+')">'+
+    html+='<article class="stop reveal'+(done[i]?' done':'')+'" id="s'+i+'" style="--c:var('+L.c+')">'+
+      '<figure class="ph" data-photo="'+i+'"><img src="'+photo(i)+'" alt="'+esc(s.cap)+'" loading="lazy" decoding="async"'+(s.pos?' style="object-position:'+s.pos+'"':'')+'><figcaption>'+esc(s.cap)+'</figcaption></figure>'+
       '<div class="shead" data-go="'+i+'"><div class="num">'+(i+1)+'</div><div class="stitle">'+
       '<div class="time">'+fmt(s.arrive)+(s.dur?' <span class="dur">'+(s.dur>=60?(s.dur/60)+' hr':s.dur+' min')+'</span>':'')+(s.optional?' <span class="dur">optional</span>':'')+'</div>'+
       '<h3>'+s.name+(s.bye?'<span class="bye">Bye, Griffin</span>':'')+'</h3><div class="addr">'+s.addr+'</div></div>'+
-      '<button class="chk" type="button" data-chk="'+i+'" aria-label="Mark '+s.name.replace(/"/g,'')+' visited">✓</button></div>'+
+      '<button class="chk" type="button" data-chk="'+i+'" aria-label="Mark '+esc(s.name)+' visited">✓</button></div>'+
       '<div class="body">'+s.body.map(function(p){return '<p>'+p+'</p>';}).join('')+(s.tip?'<div class="tip">'+s.tip+'</div>':'')+(s.hours?'<div class="hours">⏱ '+s.hours+'</div>':'')+flag+'</div>'+
       '<div class="acts"><a class="act primary" href="'+gmaps(s)+'" target="_blank" rel="noopener">'+(s.transit?'Transit directions':'Directions')+'</a><button class="act" type="button" data-go="'+i+'">Show on map</button></div>'+
       '</article>';
   });
   list.innerHTML=html;
   document.getElementById('endTime').textContent=fmt(STOPS[STOPS.length-1].arrive);
+  observeReveals(list,rendered);
+  rendered=true;
 }
 render();
+observeReveals(document,false);
 
 document.getElementById('startSeg').addEventListener('click',function(e){
   var b=e.target.closest('button'); if(!b)return;
@@ -316,56 +463,166 @@ document.getElementById('startSeg').addEventListener('click',function(e){
 list.addEventListener('click',function(e){
   var c=e.target.closest('[data-chk]');
   if(c){e.stopPropagation();var i=+c.getAttribute('data-chk');done[i]=!done[i];if(!done[i])delete done[i];saveDone();document.getElementById('s'+i).classList.toggle('done',!!done[i]);return;}
+  var ph=e.target.closest('[data-photo]');
+  if(ph){openPhoto(+ph.getAttribute('data-photo'));return;}
   if(e.target.closest('a'))return;
   var g=e.target.closest('[data-go]');
-  if(g){focusStop(+g.getAttribute('data-go'),false);}
+  if(g){focusStop(+g.getAttribute('data-go'));}
 });
 
-/* ---------- map ---------- */
-var map=null, markers=[], legLines={}, meMarker=null, meCircle=null, watchId=null;
-function initMap(){
-  if(typeof L==='undefined'){document.getElementById('map').innerHTML='<p style="padding:16px">Map couldn’t load. Check your connection. The Directions buttons still work.</p>';return;}
-  map=L.map('map',{zoomControl:false,tap:true}).setView([42.355,-71.068],14);
-  L.control.zoom({position:'topright'}).addTo(map);
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{
-    attribution:'Tiles © Esri',maxZoom:19}).addTo(map);
+/* ---------- hero parallax + progress (same feel as the Aspen page) ---------- */
+(function(){
+  var bg=document.getElementById('heroBg'), inner=document.getElementById('heroInner'), sd=document.getElementById('scrolldown');
+  var layers=[].slice.call(document.querySelectorAll('.skyline svg')), progress=document.getElementById('progress');
+  var vh=window.innerHeight, ticking=false;
+  window.addEventListener('resize',function(){vh=window.innerHeight;},{passive:true});
+  function apply(){
+    ticking=false;
+    var h=document.documentElement, y=window.pageYOffset||h.scrollTop||0, max=h.scrollHeight-h.clientHeight;
+    progress.style.width=(max>0?(y/max*100):0)+'%';
+    sd.style.opacity=Math.max(0,.85-y/180).toFixed(2);
+    if(reduceMotion||y>vh*1.3){return;}
+    bg.style.setProperty('--par',(y*0.4).toFixed(1)+'px');
+    inner.style.transform='translateY('+(y*0.22).toFixed(1)+'px)';
+    inner.style.opacity=Math.max(0,1-y/(vh*0.6)).toFixed(3);
+    for(var i=0;i<layers.length;i++){
+      var sp=parseFloat(layers[i].getAttribute('data-speed'))||0;
+      layers[i].style.transform='translateY('+(y*sp).toFixed(1)+'px)';
+    }
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(apply);}},{passive:true});
+  apply();
+})();
 
-  ['griffin','hill','common','northend'].forEach(function(id){
-    var col=css(legOf(id).c);
-    L.polyline(ROUTES[id].line,{color:'#fff',weight:8,opacity:.85}).addTo(map);
-    legLines[id]=L.polyline(ROUTES[id].line,{color:col,weight:5,opacity:.95}).addTo(map);
+/* ---------- map ---------- */
+var map=null, markers=[], pinEls=[], geo=null, openIdx=-1, hoverPop=null;
+var MAPCOL={
+  light:{land:'#F1EADC',land2:'#EAE1D0',water:'#B5C8D5',park:'#D3DDBF',bldg:'#E3D4BE',road:'#FFFDF7',roadCase:'#DED1BB',rail:'#CBBFA9',label:'#3D4964',waterLabel:'#4E6F89',halo:'#F4EEE3',routeCase:'#FFFCF6',alt:'#7C8394'},
+  dark:{land:'#121B2D',land2:'#162036',water:'#0A1729',park:'#16261F',bldg:'#1E2A41',road:'#27344E',roadCase:'#1A2539',rail:'#2B3753',label:'#AEB8CC',waterLabel:'#6E8DAA',halo:'#0E1626',routeCase:'#0E1626',alt:'#8C93A3'}
+};
+function pal(){return (darkMQ&&darkMQ.matches)?MAPCOL.dark:MAPCOL.light;}
+function setP(id,prop,val){try{map.setPaintProperty(id,prop,val);}catch(e){}}
+
+function recolor(){
+  var P=pal();
+  map.getStyle().layers.forEach(function(l){
+    var id=l.id.toLowerCase(), t=l.type;
+    if(id.indexOf('r-')===0)return;
+    if(t==='background'){setP(l.id,'background-color',P.land);}
+    else if(t==='fill'){
+      if(/water|ocean|lake|river/.test(id)){setP(l.id,'fill-color',P.water);}
+      else if(/park|grass|wood|forest|cemetery|pitch|garden|landcover|nature|golf/.test(id)){setP(l.id,'fill-color',P.park);setP(l.id,'fill-opacity',1);}
+      else if(/building/.test(id)){setP(l.id,'fill-color',P.bldg);setP(l.id,'fill-outline-color',P.roadCase);}
+      else{setP(l.id,'fill-color',P.land2);}
+    }else if(t==='line'){
+      if(/water|river|stream|canal|ocean/.test(id)){setP(l.id,'line-color',P.water);}
+      else if(/rail|transit|subway|tram/.test(id)){setP(l.id,'line-color',P.rail);}
+      else if(/boundary|admin/.test(id)){try{map.setLayoutProperty(l.id,'visibility','none');}catch(e){}}
+      else if(/casing|outline/.test(id)){setP(l.id,'line-color',P.roadCase);}
+      else{setP(l.id,'line-color',P.road);}
+    }else if(t==='fill-extrusion'){setP(l.id,'fill-extrusion-color',P.bldg);}
+    else if(t==='symbol'){
+      setP(l.id,'text-color',/water|ocean|lake|river/.test(id)?P.waterLabel:P.label);
+      setP(l.id,'text-halo-color',P.halo);setP(l.id,'text-halo-width',1.4);
+    }
   });
-  L.polyline(ROUTES.walkalt.line,{color:css('--muted'),weight:3,opacity:.8,dashArray:'2 7'}).addTo(map).bindTooltip('Walking alternative to the T, ~25–30 min');
-  legLines.t=L.polyline(T_LINE,{color:css('--orange'),weight:5,opacity:.95,dashArray:'10 8'}).addTo(map).bindTooltip('Orange Line · 3 stops');
+}
+function lineGeo(coords){return {type:'Feature',geometry:{type:'LineString',coordinates:coords.map(lngLat)}};}
+function routeColors(){
+  var P=pal();
+  ['griffin','hill','common','northend','t'].forEach(function(id){
+    setP('r-'+id,'line-color',css(legOf(id).c));
+    setP('r-'+id+'-case','line-color',P.routeCase);
+  });
+  setP('r-alt','line-color',P.alt);
+}
+function addRoutes(){
+  var P=pal(), wCase=['interpolate',['linear'],['zoom'],12,5,16,11], wMain=['interpolate',['linear'],['zoom'],12,2.6,16,6];
+  map.addSource('r-alt',{type:'geojson',data:lineGeo(ROUTES.walkalt.line)});
+  map.addLayer({id:'r-alt',type:'line',source:'r-alt',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':P.alt,'line-width':['interpolate',['linear'],['zoom'],12,2,16,4],'line-dasharray':[0,2]}});
+  var src={griffin:ROUTES.griffin.line,hill:ROUTES.hill.line,common:ROUTES.common.line,northend:ROUTES.northend.line,t:T_LINE};
+  Object.keys(src).forEach(function(id){
+    map.addSource('r-'+id,{type:'geojson',data:lineGeo(src[id])});
+    map.addLayer({id:'r-'+id+'-case',type:'line',source:'r-'+id,layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':P.routeCase,'line-width':wCase}});
+    var paint={'line-color':css(legOf(id).c),'line-width':wMain};
+    if(id==='t'){paint['line-dasharray']=[1.6,1.2];}
+    map.addLayer({id:'r-'+id,type:'line',source:'r-'+id,layout:{'line-cap':id==='t'?'butt':'round','line-join':'round'},paint:paint});
+  });
+}
+function boundsOf(coordLists){
+  var b=new maplibregl.LngLatBounds();
+  coordLists.forEach(function(cs){cs.forEach(function(ll){b.extend(lngLat(ll));});});
+  return b;
+}
+function allBounds(){return boundsOf([ROUTES.griffin.line,ROUTES.hill.line,ROUTES.common.line,ROUTES.northend.line]);}
+function legCoords(id){return id==='t'?[T_LINE]:[ROUTES[id].line];}
+function popupHtml(i){
+  var s=STOPS[i];
+  return '<img class="pop-img" data-photo="'+i+'" src="'+photo(i)+'" alt="'+esc(s.cap)+'"'+(s.pos?' style="object-position:'+s.pos+'"':'')+'>'+
+    '<div class="pop-t">'+(i+1)+'. '+s.name+'</div><div class="pop-time">'+fmt(s.arrive)+' · '+s.addr+'</div><span class="pop-go" data-i="'+i+'">Read more ↓</span>';
+}
+function wirePopup(el,i){
+  if(!el)return;
+  var go=el.querySelector('.pop-go'); if(go){go.onclick=function(){scrollToCard(i);};}
+  var im=el.querySelector('.pop-img'); if(im){im.onclick=function(){openPhoto(i);};}
+}
+function refreshPopups(){markers.forEach(function(m,i){m.getPopup().setHTML(popupHtml(i));});}
+function syncFar(){document.getElementById('map').classList.toggle('far',map.getZoom()<14.6);}
+
+function initMap(){
+  var el=document.getElementById('map');
+  if(typeof maplibregl==='undefined'){el.innerHTML='<p class="mapfail">The map couldn’t load. Check your connection. The Directions buttons still work.</p>';return;}
+  try{
+    map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/positron',bounds:allBounds(),fitBoundsOptions:{padding:28},attributionControl:false,dragRotate:false,pitchWithRotate:false,maxZoom:19});
+  }catch(e){el.innerHTML='<p class="mapfail">This phone’s browser can’t draw the map. The Directions buttons still work.</p>';map=null;return;}
+  map.touchZoomRotate.disableRotation();
+  map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
+  map.addControl(new maplibregl.AttributionControl({compact:true}),'bottom-right');
+  geo=new maplibregl.GeolocateControl({positionOptions:{enableHighAccuracy:true},trackUserLocation:true,showAccuracyCircle:true});
+  map.addControl(geo,'top-right');
+  var me=document.getElementById('btnMe');
+  geo.on('geolocate',function(){me.classList.add('on');me.textContent='◎ Me';});
+  geo.on('trackuserlocationend',function(){me.classList.remove('on');});
+  geo.on('error',function(err){me.classList.remove('on');me.textContent='◎ Me';alert(err&&err.code===1?'Location permission is off. Turn it on for this site in your browser settings.':'Couldn’t find your location just now.');});
+
+  var ready=false;
+  function onStyle(){if(ready||!map.isStyleLoaded())return;ready=true;recolor();addRoutes();syncFar();
+    var at=el.querySelector('.maplibregl-ctrl-attrib');if(at){at.classList.remove('maplibregl-compact-show');}}
+  map.on('styledata',onStyle);map.on('load',onStyle);
+  map.on('zoom',syncFar);
+  hoverPop=new maplibregl.Popup({offset:18,closeButton:false,closeOnClick:false,maxWidth:'264px',className:'hover-pop'});
 
   STOPS.forEach(function(s,i){
-    var col=css(legOf(s.leg).c);
-    var icon=L.divIcon({className:'',html:'<div class="pin" style="background:'+col+'">'+(i+1)+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-12]});
-    var m=L.marker(s.ll,{icon:icon,zIndexOffset:i===STOPS.length-1?-100:0,title:s.name}).addTo(map);
-    m.bindPopup(popupHtml(i),{closeButton:false,autoPanPaddingTopLeft:[10,10]});
-    m.on('popupopen',function(){highlight(i);});
-    markers.push(m);
+    var wrap=document.createElement('div'), pe=document.createElement('div');
+    pe.className='pin';pe.style.setProperty('--c','var('+legOf(s.leg).c+')');pe.textContent=String(i+1);
+    wrap.setAttribute('aria-label',s.name);wrap.appendChild(pe);
+    var pop=new maplibregl.Popup({offset:18,closeButton:false,maxWidth:'264px'}).setHTML(popupHtml(i));
+    pop.on('open',function(){
+      hoverPop.remove();
+      openIdx=i;highlight(i);pinEls.forEach(function(p,j){p.classList.toggle('sel',j===i);});
+      wirePopup(pop.getElement(),i);
+    });
+    pop.on('close',function(){if(openIdx===i){openIdx=-1;}pe.classList.remove('sel');});
+    var m=new maplibregl.Marker({element:wrap,anchor:'center'}).setLngLat(lngLat(s.ll)).setPopup(pop).addTo(map);
+    if(canHover){
+      wrap.addEventListener('mouseenter',function(){if(openIdx===i)return;hoverPop.setLngLat(lngLat(s.ll)).setHTML(popupHtml(i)).addTo(map);});
+      wrap.addEventListener('mouseleave',function(){hoverPop.remove();});
+    }
+    markers.push(m);pinEls.push(pe);
   });
-  map.on('popupopen',function(e){
-    var el=e.popup.getElement(); if(!el)return;
-    var go=el.querySelector('.pop-go'); if(go){go.onclick=function(){scrollToCard(+go.getAttribute('data-i'));};}
-  });
-  fitAll();
   buildLegChips();
+
+  if(darkMQ&&darkMQ.addEventListener){darkMQ.addEventListener('change',function(){if(map.isStyleLoaded()){recolor();routeColors();}});}
 }
-function popupHtml(i){var s=STOPS[i];return '<b>'+(i+1)+'. '+s.name+'</b><br><span style="color:#777">'+fmt(s.arrive)+' · '+s.addr+'</span><br><span class="pop-go" data-i="'+i+'">Read more ↓</span>';}
-function refreshPopups(){markers.forEach(function(m,i){m.setPopupContent(popupHtml(i));});}
-function fitAll(){if(!map)return;var b=L.latLngBounds([]);for(var k in legLines){b.extend(legLines[k].getBounds());}map.fitBounds(b,{padding:[18,18]});}
 function buildLegChips(){
   var tools=document.getElementById('maptools');
   LEGS.forEach(function(L2){
     var b=document.createElement('button');b.className='tbtn';b.type='button';
     b.innerHTML='<span class="dot" style="background:var('+L2.c+')"></span>'+L2.name;
     b.onclick=function(){
-      if(!map||!legLines[L2.id])return;
-      map.fitBounds(legLines[L2.id].getBounds(),{padding:[30,30],maxZoom:17});
-      var first=-1;STOPS.forEach(function(s,i){if(first<0&&s.leg===L2.id)first=i;});
-      if(first>=0)scrollToCard(first);
+      if(!map)return;
+      map.fitBounds(boundsOf(legCoords(L2.id)),{padding:36,maxZoom:17,duration:reduceMotion?0:700});
+      for(var i=0;i<STOPS.length;i++){if(STOPS[i].leg===L2.id){scrollToCard(i);break;}}
     };
     tools.appendChild(b);
   });
@@ -374,38 +631,26 @@ function highlight(i){
   [].forEach.call(document.querySelectorAll('.stop.hl'),function(x){x.classList.remove('hl');});
   var el=document.getElementById('s'+i); if(el)el.classList.add('hl');
 }
-function scrollToCard(i){var el=document.getElementById('s'+i);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});highlight(i);}}
+function scrollToCard(i){var el=document.getElementById('s'+i);if(el){el.classList.add('in');el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'});highlight(i);}}
 function focusStop(i){
   highlight(i);
   if(!map)return;
-  map.flyTo(STOPS[i].ll,Math.max(map.getZoom(),16),{duration:.6});
-  setTimeout(function(){markers[i].openPopup();},620);
+  if(openIdx>=0&&openIdx!==i){markers[openIdx].getPopup().remove();}
+  var h=document.getElementById('map').clientHeight;
+  map.flyTo({center:lngLat(STOPS[i].ll),zoom:Math.max(map.getZoom(),16.2),offset:[0,Math.round(h*0.3)],duration:reduceMotion?0:700});
+  map.once('moveend',function(){if(!markers[i].getPopup().isOpen()){markers[i].togglePopup();}});
 }
 
-document.getElementById('btnAll').onclick=fitAll;
+document.getElementById('btnAll').onclick=function(){if(map)map.fitBounds(allBounds(),{padding:28,duration:reduceMotion?0:700});};
 document.getElementById('btnBig').onclick=function(){
   var box=document.getElementById('mapbox'),big=box.classList.toggle('big');
-  this.textContent=big?'⤡ Smaller map':'⤢ Bigger map';
-  setTimeout(function(){if(map)map.invalidateSize();},280);
+  this.textContent=big?'⤡ Smaller':'⤢ Bigger';
+  setTimeout(function(){if(map)map.resize();},280);
 };
 document.getElementById('btnMe').onclick=function(){
-  var btn=this;
-  if(!navigator.geolocation){alert('Location isn’t available on this device.');return;}
-  if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;btn.classList.remove('on');if(meMarker){map.removeLayer(meMarker);map.removeLayer(meCircle);meMarker=null;}return;}
-  btn.classList.add('on');btn.textContent='◎ Finding you…';
-  var first=true;
-  watchId=navigator.geolocation.watchPosition(function(p){
-    btn.textContent='◎ Me';
-    var ll=[p.coords.latitude,p.coords.longitude];
-    if(!meMarker){
-      meMarker=L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[16,16],iconAnchor:[8,8]}),zIndexOffset:1000}).addTo(map);
-      meCircle=L.circle(ll,{radius:p.coords.accuracy,color:'#1A73E8',weight:1,fillOpacity:.08}).addTo(map);
-    }else{meMarker.setLatLng(ll);meCircle.setLatLng(ll).setRadius(p.coords.accuracy);}
-    if(first){first=false;map.flyTo(ll,Math.max(map.getZoom(),16),{duration:.6});}
-  },function(err){
-    btn.classList.remove('on');btn.textContent='◎ Me';watchId=null;
-    alert(err.code===1?'Location permission is off. Turn it on for this site in your browser settings.':'Couldn’t find your location just now.');
-  },{enableHighAccuracy:true,maximumAge:10000,timeout:20000});
+  if(!geo){alert('The map isn’t loaded yet.');return;}
+  this.textContent='◎ Finding you…';
+  if(!geo.trigger()){this.textContent='◎ Me';}
 };
 
 initMap();

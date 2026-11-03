@@ -6,8 +6,9 @@ slim = {k: {"m": v["m"], "line": v["line"]} for k, v in routes.items()}
 cr = json.load(open("img/credits.json"))
 names = ["Northeastern", "Newbury St", "Comm Ave Mall", "Washington statue", "Lagoon bridge", "Make Way for Ducklings",
          "Mount Vernon St townhouse", "Charles St", "Acorn St", "Willow St sketch", "Louisburg Square", "Nathaniel Hawthorne",
-         "Louisa May Alcott", "State House", "Boston Common", "Chinatown", "Chinatown Gate", "Orange Line", "Paul Revere House",
-         "Paul Revere Mall", "Old North Church", "Copp's Hill", "Mike's Pastry", "Haymarket"]
+         "Louisa May Alcott", "State House", "Boston Common", "Granary Burying Ground", "Old State House", "Faneuil Hall",
+         "Paul Revere House", "Paul Revere Mall", "Old North Church", "Copp's Hill", "Mike's Pastry", "Haymarket", "Orange Line",
+         "Chinatown", "Chinatown Gate"]
 lis, cj = [], []
 for i, n in enumerate(names):
     c = cr[str(i)]

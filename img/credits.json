@@ -97,21 +97,21 @@
   "license": "CC BY-SA 4.0",
   "file": "File:Aerial_View_Parkman_Bandstand_at_Boston_Common_2.jpg"
  },
- "15": {
+ "25": {
   "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/2010_Chinatown_Boston_5019274106.jpg/960px-2010_Chinatown_Boston_5019274106.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "page": "https://commons.wikimedia.org/wiki/File:2010_Chinatown_Boston_5019274106.jpg",
   "artist": "Mike Babiarz",
   "license": "CC BY 2.0",
   "file": "File:2010 Chinatown Boston 5019274106.jpg"
  },
- "16": {
+ "26": {
   "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Chinatown_Gate_Boston_July_2025.jpg/960px-Chinatown_Gate_Boston_July_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "page": "https://commons.wikimedia.org/wiki/File:Chinatown_Gate_Boston_July_2025.jpg",
   "artist": "4300streetcar",
   "license": "CC BY 4.0",
   "file": "File:Chinatown Gate Boston July 2025.jpg"
  },
- "17": {
+ "24": {
   "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Haymarket_Southbound_MBTA_Orange_Line_Platform_%281%29%2C_November_2025.jpg/960px-Haymarket_Southbound_MBTA_Orange_Line_Platform_%281%29%2C_November_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "page": "https://commons.wikimedia.org/wiki/File:Haymarket_Southbound_MBTA_Orange_Line_Platform_(1),_November_2025.jpg",
   "artist": "IliketrainsR211T",
@@ -166,5 +166,26 @@
   "artist": "Ajay Suresh from New York, NY, USA",
   "license": "CC BY 2.0",
   "file": "File:Boston - Acorn Street (48718557053).jpg"
+ },
+ "15": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Boston_Granary_Burying_Ground_06.jpg/960px-Boston_Granary_Burying_Ground_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Boston_Granary_Burying_Ground_06.jpg",
+  "artist": "Miguel Hermoso Cuesta",
+  "license": "CC BY-SA 4.0",
+  "file": "File:Boston_Granary_Burying_Ground_06.jpg"
+ },
+ "16": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Old_State_House%2C_Washington_St%2C_Boston_%28493457%29_%2810773321993%29.jpg/960px-Old_State_House%2C_Washington_St%2C_Boston_%28493457%29_%2810773321993%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Old_State_House,_Washington_St,_Boston_(493457)_(10773321993).jpg",
+  "artist": "Robert Linsdell from St. Andrews, Canada",
+  "license": "CC BY 2.0",
+  "file": "File:Old_State_House,_Washington_St,_Boston_(493457)_(10773321993).jpg"
+ },
+ "17": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Faneuil_Hall_%285813514354%29.jpg/960px-Faneuil_Hall_%285813514354%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Faneuil_Hall_(5813514354).jpg",
+  "artist": "Eric Kilby from Somerville, MA, USA",
+  "license": "CC BY-SA 2.0",
+  "file": "File:Faneuil_Hall_(5813514354).jpg"
  }
 }

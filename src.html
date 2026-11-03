@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boston Afternoon Walk</title>
+<meta name="description" content="A self-guided Boston walk: Northeastern, Newbury St, Comm Ave, Beacon Hill, the Common, Chinatown and the North End.">
+<meta name="theme-color" content="#F7F2EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --bg:#F7F2EA; --card:#FFFDF9; --ink:#1E2430; --soft:#4A5160; --muted:#7A808C;
+  --line:#E6DDCF; --chip:#EFE7DA;
+  --brick:#A3402E; --navy:#2A4A73; --green:#2F6B4F; --orange:#E07C00; --gold:#A87A26;
+  --warn:#B3261E; --warnbg:#FBE9E7; --caution:#8A5A00; --cautionbg:#FFF4DB; --okbg:#E7F2EC;
+  --shadow:0 8px 24px -14px rgba(30,36,48,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171D; --card:#1C2029; --ink:#ECE8E1; --soft:#C3C0BA; --muted:#8E929B;
+    --line:#2C313C; --chip:#262B35;
+    --brick:#E07A63; --navy:#7FA6DA; --green:#6FBF95; --orange:#FFA53D; --gold:#E0B25A;
+    --warn:#FF8A80; --warnbg:#3A1E1D; --caution:#F2C46B; --cautionbg:#3A2F17; --okbg:#1D3127;
+    --shadow:0 8px 24px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171D; --card:#1C2029; --ink:#ECE8E1; --soft:#C3C0BA; --muted:#8E929B;
+  --line:#2C313C; --chip:#262B35;
+  --brick:#E07A63; --navy:#7FA6DA; --green:#6FBF95; --orange:#FFA53D; --gold:#E0B25A;
+  --warn:#FF8A80; --warnbg:#3A1E1D; --caution:#F2C46B; --cautionbg:#3A2F17; --okbg:#1D3127;
+  --shadow:0 8px 24px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.5 Inter,system-ui,-apple-system,sans-serif;}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.01em;margin:0}
+a{color:inherit}
+
+/* header */
+header.top{padding:22px 0 14px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brick)}
+h1{font-size:34px;line-height:1.08;margin-top:6px}
+.sub{color:var(--soft);margin:8px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:13px;color:var(--soft)}
+.stat b{color:var(--ink);font-weight:600}
+
+/* start time */
+.startrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.startrow span{font-size:13px;color:var(--muted);font-weight:500}
+.seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--soft);font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+
+/* heads up */
+details.heads{background:var(--cautionbg);border-radius:12px;margin:14px 0 4px;padding:0 14px}
+details.heads summary{cursor:pointer;font-weight:600;color:var(--caution);padding:12px 0;list-style:none}
+details.heads summary::-webkit-details-marker{display:none}
+details.heads summary::after{content:"＋";float:right;font-weight:500}
+details.heads[open] summary::after{content:"－"}
+details.heads ul{margin:0 0 14px;padding-left:18px;color:var(--ink)}
+details.heads li{margin:0 0 8px}
+
+/* map */
+.mapbox{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0 8px;margin:0 -16px}
+#map{height:40vh;min-height:250px;max-height:430px;border-radius:0;transition:height .25s ease}
+.mapbox.big #map{height:72vh;max-height:none}
+@media (min-width:760px){.mapbox{margin:0}#map{border-radius:14px}}
+.maptools{display:flex;gap:6px;overflow-x:auto;padding:8px 16px 0;scrollbar-width:none}
+@media (min-width:760px){.maptools{padding:8px 0 0}}
+.maptools::-webkit-scrollbar{display:none}
+.tbtn{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12.5px Inter,sans-serif;padding:7px 11px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tbtn .dot{width:9px;height:9px;border-radius:50%}
+.tbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* legs + stops */
+.leg{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.leg h2{font-size:22px}
+.leg .bar{width:5px;height:22px;border-radius:3px;align-self:center}
+.leg .meta{font-size:13px;color:var(--muted)}
+.stop{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:13px 14px 12px;margin:0 0 10px;box-shadow:var(--shadow);scroll-margin-top:calc(40vh + 70px)}
+.stop.hl{outline:2px solid var(--c);outline-offset:2px}
+.stop.done{opacity:.62}
+.shead{display:flex;gap:11px;align-items:flex-start;cursor:pointer}
+.num{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font:700 13px Inter,sans-serif;display:grid;place-items:center;margin-top:1px}
+.stitle{flex:1;min-width:0}
+.time{font-size:12.5px;font-weight:600;color:var(--c);letter-spacing:.02em}
+.stop h3{font-size:18.5px;line-height:1.2;margin-top:1px}
+.addr{font-size:13px;color:var(--muted);margin-top:2px}
+.chk{flex:0 0 auto;width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:transparent;color:transparent;cursor:pointer;font-size:16px;display:grid;place-items:center}
+.stop.done .chk{background:var(--green);border-color:var(--green);color:#fff}
+.body{margin:9px 0 0 39px;color:var(--soft)}
+.body p{margin:0 0 7px}
+.tip{background:var(--chip);border-radius:9px;padding:8px 10px;font-size:14px;margin:8px 0 0;color:var(--ink)}
+.tip b{font-weight:600}
+.hours{font-size:13px;color:var(--muted);margin-top:7px}
+.flag{border-radius:9px;padding:7px 10px;font-size:13.5px;font-weight:500;margin-top:8px}
+.flag.closed{background:var(--warnbg);color:var(--warn)}
+.flag.soon{background:var(--cautionbg);color:var(--caution)}
+.flag.ok{background:var(--okbg);color:var(--green)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0 39px}
+.act{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 13px Inter,sans-serif;padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.act.primary{background:var(--c);border-color:var(--c);color:#fff}
+.dur{display:inline-block;font-size:12px;font-weight:600;color:var(--muted);background:var(--chip);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+.walkto{font-size:12.5px;color:var(--muted);margin:-4px 0 8px 18px;display:flex;align-items:center;gap:6px}
+.walkto::before{content:"";width:2px;height:14px;background:var(--line);border-radius:2px}
+.sunset{display:flex;align-items:center;gap:10px;margin:4px 0 12px;color:var(--gold);font-size:13px;font-weight:600}
+.sunset::before,.sunset::after{content:"";flex:1;height:1px;background:var(--gold);opacity:.45}
+.bye{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--brick);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+footer{color:var(--muted);font-size:12.5px;padding:24px 0 40px;border-top:1px solid var(--line);margin-top:26px}
+
+/* leaflet bits */
+.pin{width:26px;height:26px;border-radius:50%;color:#fff;font:700 12px Inter,sans-serif;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pin.sel{transform:scale(1.25)}
+.me{width:16px;height:16px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25)}
+.leaflet-popup-content{font:14px/1.4 Inter,sans-serif;margin:10px 12px}
+.leaflet-popup-content b{font-family:Fraunces,Georgia,serif;font-size:15px}
+.pop-go{display:inline-block;margin-top:6px;font-weight:600;color:#2A4A73;cursor:pointer;text-decoration:underline}
+:root[data-theme="dark"] .leaflet-tile-pane{filter:brightness(.82) saturate(.85)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .leaflet-tile-pane{filter:brightness(.82) saturate(.85)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Tuesday · November 3</div>
+    <h1>A Boston Afternoon</h1>
+    <p class="sub">Northeastern to the North End: shopping on Newbury, bookstores and authors' houses on Beacon Hill, then the Common, Chinatown and cannoli.</p>
+    <div class="stats">
+      <div class="stat"><b>~5.8 mi</b> walking</div>
+      <div class="stat"><b>1</b> short T ride</div>
+      <div class="stat">Sunset <b>4:31 PM</b></div>
+      <div class="stat">Done by <b id="endTime">~6:00</b></div>
+    </div>
+    <div class="startrow">
+      <span>Starting at</span>
+      <div class="seg" id="startSeg">
+        <button data-start="720" aria-pressed="true">12:00</button>
+        <button data-start="750" aria-pressed="false">12:30</button>
+        <button data-start="780" aria-pressed="false">1:00</button>
+      </div>
+    </div>
+    <details class="heads">
+      <summary>Read this first · timing &amp; tips</summary>
+      <ul>
+        <li><b>Sunset is about 4:31.</b> Beacon Hill and the Common happen in daylight. You'll reach Chinatown around dusk and the North End after dark. Hanover St is busy and well lit at night.</li>
+        <li><b>Paul Revere House closes at 4:15 and Old North Church at 5:00</b>, so at this pace you'll probably see both from outside. If you want to go inside Old North: after the Common, take the <b>Green Line from Park Street to Haymarket</b> (2 stops), do the North End first, then take the <b>Orange Line from Haymarket back to Chinatown</b> for dinner.</li>
+        <li><b>Running behind?</b> Skip Copp's Hill first, then the Pinckney St houses. To skip Chinatown entirely, take the Green Line from Park Street straight to Haymarket.</li>
+        <li><b>T fare:</b> tap a contactless credit card or your phone at the gate ($2.40). Bring a little cash for bakeries.</li>
+        <li><b>Wear good shoes.</b> Acorn St is cobblestone and Beacon Hill's sidewalks are uneven brick.</li>
+        <li>Tap <b>◎ Me</b> on the map to see where you are. Tap a stop's card to find it on the map, and the ✓ to check it off.</li>
+      </ul>
+    </details>
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="mapbox" id="mapbox">
+    <div id="map" role="region" aria-label="Walking route map"></div>
+    <div class="maptools" id="maptools">
+      <button class="tbtn" id="btnMe" type="button">◎ Me</button>
+      <button class="tbtn" id="btnAll" type="button">Whole route</button>
+      <button class="tbtn" id="btnBig" type="button">⤢ Bigger map</button>
+    </div>
+  </div>
+  <main id="list"></main>
+  <footer>
+    Times are estimates at a relaxed strolling pace. Store hours come from the stores' own sites or OpenStreetMap, so check before you go out of your way. Map tiles © Esri. Walking routes from OSRM using OpenStreetMap data.
+  </footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var ROUTES = __ROUTES__;
+
+var LEGS = [
+  {id:'griffin',  name:'With Griffin',                 c:'--brick',  note:'Northeastern → Newbury → Comm Ave'},
+  {id:'hill',     name:'Public Garden & Beacon Hill',  c:'--navy',   note:'bookstore, vintage, authors’ houses'},
+  {id:'common',   name:'The Common & Chinatown',       c:'--green',  note:'down the hill to Beach St'},
+  {id:'t',        name:'The shortcut',                 c:'--orange', note:'Orange Line, 3 stops'},
+  {id:'northend', name:'The North End',                c:'--gold',   note:'Revere, Old North, cannoli'}
+];
+
+// walk = minutes walking to reach this stop, dur = minutes spent there, close = closing time (minutes after midnight)
+var STOPS = [
+  {leg:'griffin', ll:[42.340125,-71.088324], walk:0, dur:30, name:'Northeastern University', addr:'Krentzman Quad · 360 Huntington Ave',
+   body:['Start with Griffin’s campus tour: Krentzman Quad, Centennial Common, Snell Library, and his favorite spots.']},
+  {leg:'griffin', ll:[42.348298,-71.086637], walk:15, dur:60, name:'Newbury Street', addr:'Mass Ave → Berkeley St',
+   body:['Eight blocks of shops in 1880s brownstones. Many are down a few steps or up a stoop, so look up and down, not just ahead. The Mass Ave end is younger and quirkier, and it gets more polished (boutiques, galleries, salons) toward the Public Garden.',
+         'On the way, Mass Ave takes you past Symphony Hall and the long reflecting pool at Christian Science Plaza.'],
+   tip:'<b>Know where you are:</b> the cross streets go in alphabetical order. Hereford, Gloucester, Fairfield, Exeter, Dartmouth, Clarendon, Berkeley, Arlington. <b>Trident Booksellers &amp; Café</b> (338 Newbury) is right at the start.'},
+  {leg:'griffin', ll:[42.352870,-71.073840], walk:2, dur:8, name:'Commonwealth Avenue Mall', addr:'Berkeley St → Arlington St',
+   body:['Turn up Berkeley St one block to the mall, the tree-lined promenade down the middle of Comm Ave. It’s the first link of Olmsted’s Emerald Necklace of parks. Walk toward the Public Garden past the 1865 Alexander Hamilton statue.']},
+  {leg:'griffin', ll:[42.353848,-71.070949], walk:1, dur:4, name:'Public Garden gate', addr:'George Washington statue · Arlington St', bye:true,
+   body:['Griffin heads off here. The 1869 equestrian Washington faces straight down Comm Ave. From here on, you’re on your own.']},
+
+  {leg:'hill', ll:[42.354125,-71.069915], walk:1, dur:8, name:'Public Garden & the lagoon bridge', addr:'Public Garden',
+   body:['America’s first public botanical garden (1837). The little 1867 footbridge over the lagoon is often called the world’s smallest suspension bridge. Stop in the middle for the view both ways.',
+         'The Swan Boats are put away for the season (they run spring to September).']},
+  {leg:'hill', ll:[42.355519,-71.069750], walk:3, dur:5, name:'Make Way for Ducklings', addr:'Near Charles & Beacon St corner',
+   body:['Mrs. Mallard and her eight ducklings in bronze, by Nancy Schön (1987), from Robert McCloskey’s 1941 book set right here. Everyone takes the photo, and so should you.']},
+  {leg:'hill', ll:[42.358183,-71.070318], walk:4, dur:20, close:21*60, closeLbl:'9 PM', name:'Beacon Hill Books & Café', addr:'71 Charles St',
+   body:['The bookstore everyone talks about: an independent shop that fills a 19th-century Charles Street townhouse room after room, floor after floor, with a café inside.'],
+   hours:'Tuesday 8 AM – 9 PM'},
+  {leg:'hill', ll:[42.358674,-71.070859], walk:1, dur:20, close:17*60, closeLbl:'5 PM', name:'Vintage on Charles St', addr:'Vintage Taste · 100 Charles  ·  Covet · 109 Charles',
+   body:['Two secondhand shops a few doors apart: <b>Vintage Taste</b> for vintage clothing and accessories, and <b>Covet</b> for designer consignment. The rest of Charles St is antiques and boutiques, so browse the windows as you go.'],
+   hours:'Vintage Taste Mon–Sat 11–5 · Covet Mon–Sat 10–7 (posted hours, worth a quick check)'},
+  {leg:'hill', ll:[42.357620,-71.068837], walk:4, dur:5, name:'Acorn Street', addr:'Between West Cedar & Willow St',
+   body:['Often called the most photographed street in America: a narrow cobblestone lane from the 1820s, once home to the coachmen and servants of the grand houses nearby.'],
+   tip:'The stones are uneven, so watch your footing.'},
+  {leg:'hill', ll:[42.357708,-71.068267], walk:1, dur:2, name:'Sylvia Plath’s apartment', addr:'9 Willow St',
+   body:['Sylvia Plath and Ted Hughes lived here in 1958–59, while she sat in on Robert Lowell’s poetry seminar at BU.']},
+  {leg:'hill', ll:[42.358444,-71.068764], walk:1, dur:5, name:'Louisburg Square', addr:'Louisa May Alcott · No. 10',
+   body:['The most coveted address on the Hill: bowfront houses around a private, fenced green (only residents have keys). Louisa May Alcott, author of <i>Little Women</i>, lived at No. 10 in the last years of her life.']},
+  {leg:'hill', ll:[42.358751,-71.067376], walk:2, dur:1, name:'Nathaniel Hawthorne', addr:'54 Pinckney St',
+   body:['Hawthorne lived here around 1840 while working at the Boston Custom House, about ten years before <i>The Scarlet Letter</i>.']},
+  {leg:'hill', ll:[42.358754,-71.065972], walk:1, dur:2, name:'The young Alcotts', addr:'20 Pinckney St',
+   body:['The Alcott family’s home in the early 1850s, when Louisa was about 20 and writing to help pay the bills. Thoreau is linked to No. 4, a few doors up.']},
+  {leg:'hill', ll:[42.358602,-71.063875], walk:5, dur:8, name:'State House & the Shaw Memorial', addr:'Beacon St at Park St',
+   body:['Charles Bulfinch’s 1798 State House, with its gold-leaf dome. Directly across Beacon St is Augustus Saint-Gaudens’ memorial (1897) to Robert Gould Shaw and the 54th Massachusetts, one of the first Black regiments of the Civil War. It’s the story behind the film <i>Glory</i>.']},
+
+  {leg:'common', ll:[42.356090,-71.065714], walk:7, dur:12, name:'Boston Common', addr:'Frog Pond · Parkman Bandstand',
+   body:['The oldest public park in the country (1634), once a cow pasture and militia training ground. Head down the hill past the Frog Pond (an ice rink in winter) and the bandstand toward the corner of Boylston and Tremont.']},
+  {leg:'common', ll:[42.351477,-71.060602], walk:11, dur:15, name:'Chinatown · Beach Street', addr:'Ho Yuen Bakery · 54 Beach St',
+   body:['Follow Boylston and Washington St into Chinatown. Beach St is the main drag, packed with bakeries, tea shops and restaurants.'],
+   tip:'<b>Snack stop:</b> Ho Yuen Bakery is known for its egg tarts. For bubble tea, you’ll pass plenty of shops on Beach St and Harrison Ave.'},
+  {leg:'common', ll:[42.351189,-71.059752], walk:1, dur:5, name:'Chinatown Gate', addr:'Beach St at Surface Rd',
+   body:['The paifang gate was a gift from Taiwan in 1982 and is guarded by stone foo lions. The inscription 天下為公 means “everything under heaven is for the people.”']},
+
+  {leg:'t', ll:[42.352217,-71.062607], walk:4, dur:15, name:'Orange Line → Haymarket', addr:'Chinatown station · Washington St at Essex', transit:[42.362094,-71.057926],
+   body:['Your shortcut. Take the Orange Line toward <b>Oak Grove</b> three stops (Downtown Crossing, State, Haymarket), about 6 minutes of riding.'],
+   tip:'<b>Fare:</b> tap a contactless card or phone at the gate ($2.40). Some entrances serve only one direction, so check that the sign says Oak Grove. <b>Rather walk?</b> It’s 25–30 min via Downtown Crossing, the Old State House and Faneuil Hall (dotted line on the map).'},
+
+  {leg:'northend', ll:[42.363738,-71.053683], walk:7, dur:5, close:16*60+15, closeLbl:'4:15', name:'Paul Revere House', addr:'19 North Square',
+   body:['From Haymarket, cross the Greenway and wind into the North End. Built around 1680, this is the oldest house in downtown Boston. Paul Revere lived here when he set out on his midnight ride in 1775.'],
+   hours:'Daily 10 AM – 4:15 PM (winter hours)'},
+  {leg:'northend', ll:[42.365760,-71.053634], walk:4, dur:5, name:'Paul Revere Mall', addr:'“The Prado” · Hanover St',
+   body:['A brick plaza with Cyrus Dallin’s statue of Revere on horseback, framed by the Old North steeple behind it. Especially lovely at dusk.']},
+  {leg:'northend', ll:[42.366316,-71.054448], walk:2, dur:10, close:17*60, closeLbl:'5:00', name:'Old North Church', addr:'193 Salem St',
+   body:['Boston’s oldest standing church (1723). On April 18, 1775, two lanterns hung in this steeple signaled that the British were coming by sea: “one if by land, two if by sea.”'],
+   hours:'Tue–Sat 10 AM – 5 PM · small admission'},
+  {leg:'northend', ll:[42.367366,-71.055912], walk:4, dur:8, optional:true, name:'Copp’s Hill Burying Ground', addr:'Hull St · optional',
+   body:['Boston’s second-oldest cemetery (1659), up on the hill with a view across the harbor to Charlestown and the USS Constitution. If the gates are shut after dark, look through the fence.']},
+  {leg:'northend', ll:[42.364188,-71.054241], walk:8, dur:20, name:'Cannoli on Hanover St', addr:'Mike’s · 300 Hanover  ·  Modern · 257 Hanover',
+   body:['The great debate. <b>Mike’s Pastry</b> is the famous one, with the white boxes and the line. <b>Modern Pastry</b>, a block down, fills each cannoli to order and is the locals’ pick. Try both and decide for yourselves.'],
+   tip:'Bring cash just in case. Hanover St is lined with trattorias if you want to stay for dinner.'},
+  {leg:'northend', ll:[42.362094,-71.057926], walk:5, dur:0, name:'Finish · Haymarket', addr:'Orange & Green Lines',
+   body:['You did it. Haymarket station is just back across the Greenway, and North Station is about a 10-minute walk if you need the commuter rail.']}
+];
+
+var SUNSET = 16*60+31;
+var T_LINE = [[42.352217,-71.062607],[42.355489,-71.060441],[42.358804,-71.057772],[42.362094,-71.057926]];
+
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function legOf(id){for(var i=0;i<LEGS.length;i++){if(LEGS[i].id===id)return LEGS[i];}}
+function fmt(m){m=Math.round(m);var h=Math.floor(m/60),mm=m%60,ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+' '+ap;}
+function fmtShort(m){return fmt(m).replace(' PM','').replace(' AM','');}
+function gmaps(s){
+  if(s.transit){return 'https://www.google.com/maps/dir/?api=1&destination='+s.transit[0]+','+s.transit[1]+'&travelmode=transit';}
+  return 'https://www.google.com/maps/dir/?api=1&destination='+s.ll[0]+','+s.ll[1]+'&travelmode=walking';
+}
+
+var done={};
+try{done=JSON.parse(localStorage.getItem('bw-done')||'{}')||{};}catch(e){done={};}
+function saveDone(){try{localStorage.setItem('bw-done',JSON.stringify(done));}catch(e){}}
+
+var start=720;
+try{var s0=parseInt(localStorage.getItem('bw-start'),10);if(s0===720||s0===750||s0===780){start=s0;}}catch(e){}
+
+/* ---------- list ---------- */
+var list=document.getElementById('list');
+function render(){
+  var t=start, html='', curLeg=null, sunsetShown=false;
+  STOPS.forEach(function(s,i){
+    t+=s.walk; s.arrive=t; s.leave=t+s.dur; t=s.leave;
+    if(s.leg!==curLeg){
+      curLeg=s.leg; var L=legOf(s.leg), r=ROUTES[s.leg];
+      var meta=L.note+(r?' · '+(r.m/1609.34).toFixed(1)+' mi':'');
+      html+='<div class="leg" style="--c:var('+L.c+')"><span class="bar" style="background:var('+L.c+')"></span><h2>'+L.name+'</h2><span class="meta">'+meta+'</span></div>';
+    }
+    if(!sunsetShown && s.arrive>=SUNSET){sunsetShown=true;html+='<div class="sunset">☀ Sunset · 4:31 PM</div>';}
+    if(s.walk>0 && i>0 && STOPS[i-1].leg===s.leg){html+='<div class="walkto">'+s.walk+' min walk</div>';}
+    var L2=legOf(s.leg), flag='';
+    if(s.close){
+      if(s.arrive>=s.close){flag='<div class="flag closed">Closes at '+s.closeLbl+', before you get here ('+fmt(s.arrive)+'). See it from outside, or see the swap tip at the top.</div>';}
+      else if(s.close-s.arrive<=25){flag='<div class="flag soon">Closes at '+s.closeLbl+'. Go straight in.</div>';}
+      else if(s.close<21*60){flag='<div class="flag ok">Open until '+s.closeLbl+'. You’re in good shape.</div>';}
+    }
+    html+='<article class="stop'+(done[i]?' done':'')+'" id="s'+i+'" data-i="'+i+'" style="--c:var('+L2.c+')">'+
+      '<div class="shead" data-go="'+i+'"><div class="num">'+(i+1)+'</div><div class="stitle">'+
+      '<div class="time">'+fmt(s.arrive)+(s.dur?' <span class="dur">'+(s.dur>=60?(s.dur/60)+' hr':s.dur+' min')+'</span>':'')+(s.optional?' <span class="dur">optional</span>':'')+'</div>'+
+      '<h3>'+s.name+(s.bye?'<span class="bye">Bye, Griffin</span>':'')+'</h3><div class="addr">'+s.addr+'</div></div>'+
+      '<button class="chk" type="button" data-chk="'+i+'" aria-label="Mark '+s.name.replace(/"/g,'')+' visited">✓</button></div>'+
+      '<div class="body">'+s.body.map(function(p){return '<p>'+p+'</p>';}).join('')+(s.tip?'<div class="tip">'+s.tip+'</div>':'')+(s.hours?'<div class="hours">⏱ '+s.hours+'</div>':'')+flag+'</div>'+
+      '<div class="acts"><a class="act primary" href="'+gmaps(s)+'" target="_blank" rel="noopener">'+(s.transit?'Transit directions':'Directions')+'</a><button class="act" type="button" data-go="'+i+'">Show on map</button></div>'+
+      '</article>';
+  });
+  list.innerHTML=html;
+  document.getElementById('endTime').textContent=fmt(STOPS[STOPS.length-1].arrive);
+}
+render();
+
+document.getElementById('startSeg').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  start=parseInt(b.getAttribute('data-start'),10);
+  try{localStorage.setItem('bw-start',start);}catch(err){}
+  [].forEach.call(this.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+  render(); refreshPopups();
+});
+
+list.addEventListener('click',function(e){
+  var c=e.target.closest('[data-chk]');
+  if(c){e.stopPropagation();var i=+c.getAttribute('data-chk');done[i]=!done[i];if(!done[i])delete done[i];saveDone();document.getElementById('s'+i).classList.toggle('done',!!done[i]);return;}
+  if(e.target.closest('a'))return;
+  var g=e.target.closest('[data-go]');
+  if(g){focusStop(+g.getAttribute('data-go'),false);}
+});
+
+/* ---------- map ---------- */
+var map=null, markers=[], legLines={}, meMarker=null, meCircle=null, watchId=null;
+function initMap(){
+  if(typeof L==='undefined'){document.getElementById('map').innerHTML='<p style="padding:16px">Map couldn’t load. Check your connection. The Directions buttons still work.</p>';return;}
+  map=L.map('map',{zoomControl:false,tap:true}).setView([42.355,-71.068],14);
+  L.control.zoom({position:'topright'}).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{
+    attribution:'Tiles © Esri',maxZoom:19}).addTo(map);
+
+  ['griffin','hill','common','northend'].forEach(function(id){
+    var col=css(legOf(id).c);
+    L.polyline(ROUTES[id].line,{color:'#fff',weight:8,opacity:.85}).addTo(map);
+    legLines[id]=L.polyline(ROUTES[id].line,{color:col,weight:5,opacity:.95}).addTo(map);
+  });
+  L.polyline(ROUTES.walkalt.line,{color:css('--muted'),weight:3,opacity:.8,dashArray:'2 7'}).addTo(map).bindTooltip('Walking alternative to the T, ~25–30 min');
+  legLines.t=L.polyline(T_LINE,{color:css('--orange'),weight:5,opacity:.95,dashArray:'10 8'}).addTo(map).bindTooltip('Orange Line · 3 stops');
+
+  STOPS.forEach(function(s,i){
+    var col=css(legOf(s.leg).c);
+    var icon=L.divIcon({className:'',html:'<div class="pin" style="background:'+col+'">'+(i+1)+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-12]});
+    var m=L.marker(s.ll,{icon:icon,zIndexOffset:i===STOPS.length-1?-100:0,title:s.name}).addTo(map);
+    m.bindPopup(popupHtml(i),{closeButton:false,autoPanPaddingTopLeft:[10,10]});
+    m.on('popupopen',function(){highlight(i);});
+    markers.push(m);
+  });
+  map.on('popupopen',function(e){
+    var el=e.popup.getElement(); if(!el)return;
+    var go=el.querySelector('.pop-go'); if(go){go.onclick=function(){scrollToCard(+go.getAttribute('data-i'));};}
+  });
+  fitAll();
+  buildLegChips();
+}
+function popupHtml(i){var s=STOPS[i];return '<b>'+(i+1)+'. '+s.name+'</b><br><span style="color:#777">'+fmt(s.arrive)+' · '+s.addr+'</span><br><span class="pop-go" data-i="'+i+'">Read more ↓</span>';}
+function refreshPopups(){markers.forEach(function(m,i){m.setPopupContent(popupHtml(i));});}
+function fitAll(){if(!map)return;var b=L.latLngBounds([]);for(var k in legLines){b.extend(legLines[k].getBounds());}map.fitBounds(b,{padding:[18,18]});}
+function buildLegChips(){
+  var tools=document.getElementById('maptools');
+  LEGS.forEach(function(L2){
+    var b=document.createElement('button');b.className='tbtn';b.type='button';
+    b.innerHTML='<span class="dot" style="background:var('+L2.c+')"></span>'+L2.name;
+    b.onclick=function(){
+      if(!map||!legLines[L2.id])return;
+      map.fitBounds(legLines[L2.id].getBounds(),{padding:[30,30],maxZoom:17});
+      var first=-1;STOPS.forEach(function(s,i){if(first<0&&s.leg===L2.id)first=i;});
+      if(first>=0)scrollToCard(first);
+    };
+    tools.appendChild(b);
+  });
+}
+function highlight(i){
+  [].forEach.call(document.querySelectorAll('.stop.hl'),function(x){x.classList.remove('hl');});
+  var el=document.getElementById('s'+i); if(el)el.classList.add('hl');
+}
+function scrollToCard(i){var el=document.getElementById('s'+i);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});highlight(i);}}
+function focusStop(i){
+  highlight(i);
+  if(!map)return;
+  map.flyTo(STOPS[i].ll,Math.max(map.getZoom(),16),{duration:.6});
+  setTimeout(function(){markers[i].openPopup();},620);
+}
+
+document.getElementById('btnAll').onclick=fitAll;
+document.getElementById('btnBig').onclick=function(){
+  var box=document.getElementById('mapbox'),big=box.classList.toggle('big');
+  this.textContent=big?'⤡ Smaller map':'⤢ Bigger map';
+  setTimeout(function(){if(map)map.invalidateSize();},280);
+};
+document.getElementById('btnMe').onclick=function(){
+  var btn=this;
+  if(!navigator.geolocation){alert('Location isn’t available on this device.');return;}
+  if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;btn.classList.remove('on');if(meMarker){map.removeLayer(meMarker);map.removeLayer(meCircle);meMarker=null;}return;}
+  btn.classList.add('on');btn.textContent='◎ Finding you…';
+  var first=true;
+  watchId=navigator.geolocation.watchPosition(function(p){
+    btn.textContent='◎ Me';
+    var ll=[p.coords.latitude,p.coords.longitude];
+    if(!meMarker){
+      meMarker=L.marker(ll,{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[16,16],iconAnchor:[8,8]}),zIndexOffset:1000}).addTo(map);
+      meCircle=L.circle(ll,{radius:p.coords.accuracy,color:'#1A73E8',weight:1,fillOpacity:.08}).addTo(map);
+    }else{meMarker.setLatLng(ll);meCircle.setLatLng(ll).setRadius(p.coords.accuracy);}
+    if(first){first=false;map.flyTo(ll,Math.max(map.getZoom(),16),{duration:.6});}
+  },function(err){
+    btn.classList.remove('on');btn.textContent='◎ Me';watchId=null;
+    alert(err.code===1?'Location permission is off. Turn it on for this site in your browser settings.':'Couldn’t find your location just now.');
+  },{enableHighAccuracy:true,maximumAge:10000,timeout:20000});
+};
+
+initMap();
+</script>
+</body>
+</html>

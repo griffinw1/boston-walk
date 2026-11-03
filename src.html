@@ -268,7 +268,7 @@ footer li{margin-bottom:3px}
   <div class="glance-h">Your afternoon at a glance</div>
   <div class="glance" id="glance"></div>
   <div class="stats" style="margin-top:14px">
-    <div class="stat"><b>~5.6 mi</b> walking</div>
+    <div class="stat"><b>~5.3 mi</b> walking</div>
     <div class="stat"><b>No T</b> needed</div>
     <div class="stat">Sunset <b>4:31 PM</b></div>
     <div class="stat">Done by <b id="endTime">~6:00</b></div>
@@ -285,8 +285,9 @@ footer li{margin-bottom:3px}
     <summary>Read this first · timing &amp; tips</summary>
     <ul>
       <li><b>Sunset is about 4:31.</b> Beacon Hill, the Common and most of the Freedom Trail happen in daylight, and you'll reach the North End around dusk. Hanover St is busy and well lit at night.</li>
-      <li><b>Closing times to know:</b> the Granary Burying Ground closes at 4:00, Paul Revere House at 4:15 and Old North Church at 5:00. At a noon start you'll just make the Granary and Old North if you go straight in, and see Revere's house from outside.</li>
-      <li><b>Running behind?</b> Skip Copp's Hill first, then the Pinckney St houses. Or take the <b>Green Line from Park Street to Haymarket</b> (2 stops) to jump straight to the North End.</li>
+      <li><b>Closing times to know:</b> the Granary Burying Ground closes at 4:00, Old North Church at 5:00 and Paul Revere House at 4:15. At a noon start you'll just make the Granary if you head straight there from the State House. Old North and Revere's house you'll most likely see from outside.</li>
+      <li><b>Want to go inside Old North?</b> After the Granary, take the <b>Green Line from Park Street to Haymarket</b> (2 stops) and do the North End first. You can walk back for the Old State House and Faneuil Hall afterward.</li>
+      <li><b>Running behind?</b> Skip Copp's Hill first, then the Pinckney St houses. The times assume a relaxed strolling pace with time to look around.</li>
       <li><b>Chinatown is an extra</b> at the very end, if you still have energy or want dinner: 3 Orange Line stops from Haymarket. Tap a contactless card or your phone at the gate ($2.40), and bring a little cash for bakeries.</li>
       <li><b>Wear good shoes.</b> Acorn St is cobblestone and Beacon Hill's sidewalks are uneven brick.</li>
       <li>Tap <b>◎ Me</b> on the map to see where you are. Tap a pin to see a photo of the stop, tap a card to find it on the map, and tap the ✓ to check it off.</li>
@@ -332,70 +333,70 @@ var LEGS = [
 var STOPS = [
   {leg:'griffin', ll:[42.340125,-71.088324], walk:0, dur:30, name:'Northeastern University', addr:'Krentzman Quad · 360 Huntington Ave', cap:'Centennial Common, Northeastern',
    body:['Start with Griffin’s campus tour: Krentzman Quad, Centennial Common, Snell Library, and his favorite spots.']},
-  {leg:'griffin', ll:[42.348298,-71.086637], walk:15, dur:60, name:'Newbury Street', addr:'Mass Ave → Berkeley St', cap:'Newbury Street brownstones',
+  {leg:'griffin', ll:[42.348298,-71.086637], walk:18, dur:60, name:'Newbury Street', addr:'Mass Ave → Berkeley St', cap:'Newbury Street brownstones',
    body:['Eight blocks of shops in 1880s brownstones. Many are down a few steps or up a stoop, so look up and down, not just ahead. The Mass Ave end is younger and quirkier, and it gets more polished (boutiques, galleries, salons) toward the Public Garden.',
          'On the way, Mass Ave takes you past Symphony Hall and the long reflecting pool at Christian Science Plaza.'],
    tip:'<b>Know where you are:</b> the cross streets go in alphabetical order. Hereford, Gloucester, Fairfield, Exeter, Dartmouth, Clarendon, Berkeley, Arlington. <b>Trident Booksellers &amp; Café</b> (338 Newbury) is right at the start.'},
   {leg:'griffin', ll:[42.352870,-71.073840], walk:2, dur:8, name:'Commonwealth Avenue Mall', addr:'Berkeley St → Arlington St', cap:'The Commonwealth Avenue Mall',
    body:['Turn up Berkeley St one block to the mall, the tree-lined promenade down the middle of Comm Ave. It’s the first link of Olmsted’s Emerald Necklace of parks. Walk toward the Public Garden past the 1865 Alexander Hamilton statue.']},
-  {leg:'griffin', ll:[42.353848,-71.070949], walk:1, dur:4, name:'Public Garden gate', addr:'George Washington statue · Arlington St', bye:true, cap:'Thomas Ball’s Washington (1869)',
+  {leg:'griffin', ll:[42.353848,-71.070949], walk:2, dur:4, name:'Public Garden gate', addr:'George Washington statue · Arlington St', bye:true, cap:'Thomas Ball’s Washington (1869)',
    body:['Griffin heads off here. The 1869 equestrian Washington faces straight down Comm Ave. From here on, you’re on your own.']},
 
-  {leg:'hill', ll:[42.354125,-71.069915], walk:1, dur:8, name:'Public Garden & the lagoon bridge', addr:'Public Garden', cap:'The lagoon footbridge',
+  {leg:'hill', ll:[42.354125,-71.069915], walk:2, dur:8, name:'Public Garden & the lagoon bridge', addr:'Public Garden', cap:'The lagoon footbridge',
    body:['America’s first public botanical garden (1837). The little 1867 footbridge over the lagoon is often called the world’s smallest suspension bridge. Stop in the middle for the view both ways.',
          'The Swan Boats are put away for the season (they run spring to September).']},
   {leg:'hill', ll:[42.355519,-71.069750], walk:3, dur:5, name:'Make Way for Ducklings', addr:'Near Charles & Beacon St corner', cap:'The Ducklings, dressed for winter',
    body:['Mrs. Mallard and her eight ducklings in bronze, by Nancy Schön (1987), from Robert McCloskey’s 1941 book set right here. Everyone takes the photo, and so should you.']},
-  {leg:'hill', ll:[42.358183,-71.070318], walk:4, dur:20, close:21*60, closeLbl:'9 PM', name:'Beacon Hill Books & Café', addr:'71 Charles St', cap:'A Beacon Hill townhouse. The bookstore fills one just like it.',
+  {leg:'hill', ll:[42.358183,-71.070318], walk:5, dur:20, close:21*60, closeLbl:'9 PM', name:'Beacon Hill Books & Café', addr:'71 Charles St', cap:'A Beacon Hill townhouse. The bookstore fills one just like it.',
    body:['The bookstore everyone talks about: an independent shop that fills a 19th-century Charles Street townhouse room after room, floor after floor, with a café inside.'],
    hours:'Tuesday 8 AM – 9 PM'},
-  {leg:'hill', ll:[42.358674,-71.070859], walk:1, dur:20, close:17*60, closeLbl:'5 PM', name:'Vintage on Charles St', addr:'Vintage Taste · 100 Charles  ·  Covet · 109 Charles', cap:'Charles Street, Beacon Hill’s main street',
-   body:['Two secondhand shops a few doors apart: <b>Vintage Taste</b> for vintage clothing and accessories, and <b>Covet</b> for designer consignment. The rest of Charles St is antiques and boutiques, so browse the windows as you go.'],
+  {leg:'hill', ll:[42.358674,-71.070859], walk:2, dur:20, close:17*60, closeLbl:'5 PM', name:'Vintage on Charles St', addr:'Vintage Taste · 100 Charles  ·  Covet · 109 Charles', cap:'Charles Street, Beacon Hill’s main street',
+   body:['Two secondhand shops a few doors apart: <b>Vintage Taste</b> for vintage clothing and accessories, and <b>Covet</b> for designer consignment. The rest of Charles St is antiques and boutiques: browse up one side to Covet, then come back down the other side and turn up toward Acorn St.'],
    hours:'Vintage Taste Mon–Sat 11–5 · Covet Mon–Sat 10–7 (posted hours, worth a quick check)'},
-  {leg:'hill', ll:[42.357620,-71.068837], walk:4, dur:5, name:'Acorn Street', addr:'Between West Cedar & Willow St', cap:'Acorn Street’s cobblestones',
+  {leg:'hill', ll:[42.357620,-71.068837], walk:5, dur:5, name:'Acorn Street', addr:'Between West Cedar & Willow St', cap:'Acorn Street’s cobblestones',
    body:['Often called the most photographed street in America: a narrow cobblestone lane from the 1820s, once home to the coachmen and servants of the grand houses nearby.'],
    tip:'The stones are uneven, so watch your footing.'},
-  {leg:'hill', ll:[42.357708,-71.068267], walk:1, dur:2, name:'Sylvia Plath’s apartment', addr:'9 Willow St', cap:'Willow Street, in an old sketch',
+  {leg:'hill', ll:[42.357708,-71.068267], walk:2, dur:2, name:'Sylvia Plath’s apartment', addr:'9 Willow St', cap:'Willow Street, in an old sketch',
    body:['Sylvia Plath and Ted Hughes lived here in 1958–59, while she sat in on Robert Lowell’s poetry seminar at BU.']},
-  {leg:'hill', ll:[42.358444,-71.068764], walk:1, dur:5, name:'Louisburg Square', addr:'Louisa May Alcott · No. 10', cap:'Louisburg Square',
+  {leg:'hill', ll:[42.358444,-71.068764], walk:2, dur:5, name:'Louisburg Square', addr:'Louisa May Alcott · No. 10', cap:'Louisburg Square',
    body:['The most coveted address on the Hill: bowfront houses around a private, fenced green (only residents have keys). Louisa May Alcott, author of <i>Little Women</i>, lived at No. 10 in the last years of her life.']},
-  {leg:'hill', ll:[42.358751,-71.067376], walk:2, dur:1, name:'Nathaniel Hawthorne', addr:'54 Pinckney St', cap:'Hawthorne, photographed by Mathew Brady in the 1860s', pos:'50% 22%',
+  {leg:'hill', ll:[42.358751,-71.067376], walk:3, dur:1, name:'Nathaniel Hawthorne', addr:'54 Pinckney St', cap:'Hawthorne, photographed by Mathew Brady in the 1860s', pos:'50% 22%',
    body:['Hawthorne lived here around 1840 while working at the Boston Custom House, about ten years before <i>The Scarlet Letter</i>.']},
-  {leg:'hill', ll:[42.358754,-71.065972], walk:1, dur:2, name:'The young Alcotts', addr:'20 Pinckney St', cap:'Louisa May Alcott, about 1870', pos:'50% 25%',
+  {leg:'hill', ll:[42.358754,-71.065972], walk:2, dur:2, name:'The young Alcotts', addr:'20 Pinckney St', cap:'Louisa May Alcott, about 1870', pos:'50% 25%',
    body:['The Alcott family’s home in the early 1850s, when Louisa was about 20 and writing to help pay the bills. Thoreau is linked to No. 4, a few doors up.']},
-  {leg:'hill', ll:[42.358602,-71.063875], walk:5, dur:8, name:'State House & the Shaw Memorial', addr:'Beacon St at Park St', cap:'The State House and its gold dome',
+  {leg:'hill', ll:[42.358050,-71.063750], walk:6, dur:8, name:'State House & the Shaw Memorial', addr:'Beacon St at Park St', cap:'The State House and its gold dome',
    body:['Charles Bulfinch’s 1798 State House, with its gold-leaf dome. Directly across Beacon St is Augustus Saint-Gaudens’ memorial (1897) to Robert Gould Shaw and the 54th Massachusetts, one of the first Black regiments of the Civil War. It’s the story behind the film <i>Glory</i>.']},
 
-  {leg:'common', ll:[42.356202,-71.063103], walk:5, dur:10, name:'Boston Common', addr:'Brewer Fountain · Park St corner', cap:'The Common from above, with the Parkman Bandstand',
-   body:['The oldest public park in the country (1634), once a cow pasture and militia training ground. Cross Beacon St into the Common and drift down the hill to the Brewer Fountain at the Park Street corner.'],
-   tip:'<b>Want more of the Common?</b> Loop past the Frog Pond (an ice rink in winter) and the bandstand and back. It adds about 15 minutes, so do the Granary first if it’s close to 4.'},
-  {leg:'common', ll:[42.357133,-71.061785], walk:3, dur:8, close:16*60, closeLbl:'4:00', name:'Granary Burying Ground', addr:'Tremont St, next to Park Street Church', cap:'The Granary Burying Ground',
-   body:['Paul Revere, Samuel Adams and John Hancock are all buried here, along with the five victims of the Boston Massacre and Ben Franklin’s parents (the big obelisk in the middle). Park Street Church’s white steeple (1809) is right next door.',
-         'From here, follow the <b>red brick line</b> in the sidewalk. That’s the Freedom Trail, and it leads you the rest of the way.'],
+  {leg:'common', ll:[42.357133,-71.061785], walk:5, dur:8, close:16*60, closeLbl:'4:00', name:'Granary Burying Ground', addr:'Tremont St, next to Park Street Church', cap:'The Granary Burying Ground',
+   body:['Walk down Park St along the edge of the Common to Park Street Church’s white steeple (1809). The burying ground is right next door. Paul Revere, Samuel Adams and John Hancock are all buried here, along with the five victims of the Boston Massacre and Ben Franklin’s parents (the big obelisk in the middle).'],
    hours:'Daily 9 AM – 4 PM · free. If the gate is shut, the iron fence along Tremont St gives you a good view.'},
-  {leg:'common', ll:[42.358731,-71.057468], walk:7, dur:6, close:17*60, closeLbl:'5:00', name:'Old State House', addr:'206 Washington St at State St', cap:'The Old State House, with the lion and unicorn on its roof',
+  {leg:'common', ll:[42.356202,-71.063103], walk:3, dur:10, name:'Boston Common', addr:'Brewer Fountain · Park St corner', cap:'The Common from above, with the Parkman Bandstand',
+   body:['Cross Tremont St back into the Common, the oldest public park in the country (1634), once a cow pasture and militia training ground. The Brewer Fountain is just inside the Park Street corner.'],
+   tip:'<b>From here, follow the red brick line</b> in the sidewalk down Tremont and School St. That’s the Freedom Trail, and it leads you the rest of the way. <b>Want more of the Common?</b> Loop past the Frog Pond and the bandstand first; it adds about 15 minutes.'},
+  {leg:'common', ll:[42.358731,-71.057468], walk:10, dur:6, close:17*60, closeLbl:'5:00', name:'Old State House', addr:'206 Washington St at State St', cap:'The Old State House, with the lion and unicorn on its roof',
    body:['Built in 1713, it’s the oldest surviving public building in Boston, now dwarfed by the towers around it. The Declaration of Independence was read to the city from the balcony in July 1776.',
          'Look down: the ring of cobblestones in the traffic island out front marks the site of the Boston Massacre (1770).'],
    hours:'Museum daily 10 AM – 5 PM · admission. The outside is the main event.'},
-  {leg:'common', ll:[42.360034,-71.056234], walk:4, dur:10, name:'Faneuil Hall & Quincy Market', addr:'Faneuil Hall Marketplace', cap:'Faneuil Hall, the “Cradle of Liberty”',
+  {leg:'common', ll:[42.360034,-71.056234], walk:2, dur:10, name:'Faneuil Hall & Quincy Market', addr:'Faneuil Hall Marketplace', cap:'Faneuil Hall, the “Cradle of Liberty”',
    body:['Faneuil Hall (1742) was a market downstairs and a meeting hall upstairs, where colonists argued their way toward revolution. Look up for the gilded grasshopper weathervane. Behind it, Quincy Market’s long food hall is good for a hot drink and a sit.'],
    tip:'<b>Restroom break:</b> Quincy Market has public restrooms, and this is the easiest place to find one before the North End.'},
 
-  {leg:'northend', ll:[42.363738,-71.053683], walk:8, dur:5, close:16*60+15, closeLbl:'4:15', name:'Paul Revere House', addr:'19 North Square', cap:'The Paul Revere House, built around 1680',
-   body:['From Faneuil Hall, cut through the cobbled Blackstone Block past the Union Oyster House (1826, the oldest restaurant in the country), cross the Greenway, and wind into the North End. Built around 1680, this is the oldest house in downtown Boston. Paul Revere lived here when he set out on his midnight ride in 1775.'],
-   hours:'Daily 10 AM – 4:15 PM (winter hours)'},
-  {leg:'northend', ll:[42.365760,-71.053634], walk:4, dur:3, name:'Paul Revere Mall', addr:'“The Prado” · Hanover St', cap:'Revere on horseback, with the Old North steeple',
-   body:['A brick plaza with Cyrus Dallin’s statue of Revere on horseback, framed by the Old North steeple behind it. Especially lovely at dusk. If it’s close to 5, go straight through to the church and linger here on the way back.']},
+  {leg:'northend', ll:[42.365760,-71.053634], walk:13, dur:4, name:'Paul Revere Mall', addr:'“The Prado” · Hanover St', cap:'Revere on horseback, with the Old North steeple',
+   body:['From Faneuil Hall, cut through the cobbled Blackstone Block past the Union Oyster House (1826, the oldest restaurant in the country), cross the Greenway, and walk up Hanover St, the North End’s main street. You’ll come back down it later for cannoli.',
+         'The Prado is a brick plaza with Cyrus Dallin’s statue of Revere on horseback, framed by the Old North steeple behind it. If it’s close to 5, go straight through to the church first.']},
   {leg:'northend', ll:[42.366316,-71.054448], walk:2, dur:10, close:17*60, closeLbl:'5:00', name:'Old North Church', addr:'193 Salem St', cap:'Old North Church',
    body:['Boston’s oldest standing church (1723). On April 18, 1775, two lanterns hung in this steeple signaled that the British were coming by sea: “one if by land, two if by sea.”'],
    hours:'Tue–Sat 10 AM – 5 PM · small admission'},
-  {leg:'northend', ll:[42.367366,-71.055912], walk:4, dur:8, optional:true, name:'Copp’s Hill Burying Ground', addr:'Hull St · optional', cap:'Copp’s Hill Burying Ground',
-   body:['Boston’s second-oldest cemetery (1659), up on the hill with a view across the harbor to Charlestown and the USS Constitution. If the gates are shut after dark, look through the fence.']},
-  {leg:'northend', ll:[42.364188,-71.054241], walk:8, dur:20, name:'Cannoli on Hanover St', addr:'Mike’s · 300 Hanover  ·  Modern · 257 Hanover', cap:'Mike’s Pastry on Hanover Street',
-   body:['The great debate. <b>Mike’s Pastry</b> is the famous one, with the white boxes and the line. <b>Modern Pastry</b>, a block down, fills each cannoli to order and is the locals’ pick. Try both and decide for yourselves.'],
+  {leg:'northend', ll:[42.367366,-71.055912], walk:3, dur:8, optional:true, name:'Copp’s Hill Burying Ground', addr:'Hull St · optional', cap:'Copp’s Hill Burying Ground',
+   body:['Up Hull St from the church. Boston’s second-oldest cemetery (1659), on the hill with a view across the harbor to Charlestown and the USS Constitution. If the gates are shut after dark, look through the fence.']},
+  {leg:'northend', ll:[42.363738,-71.053683], walk:8, dur:5, close:16*60+15, closeLbl:'4:15', name:'Paul Revere House', addr:'19 North Square', cap:'The Paul Revere House, built around 1680',
+   body:['Wind back down through the North End’s narrow streets to North Square. Built around 1680, this is the oldest house in downtown Boston. Paul Revere lived here when he set out on his midnight ride in 1775.'],
+   hours:'Daily 10 AM – 4:15 PM (winter hours)'},
+  {leg:'northend', ll:[42.364188,-71.054241], walk:2, dur:20, name:'Cannoli on Hanover St', addr:'Mike’s · 300 Hanover  ·  Modern · 257 Hanover', cap:'Mike’s Pastry on Hanover Street',
+   body:['Around the corner, back on Hanover. The great debate: <b>Mike’s Pastry</b> is the famous one, with the white boxes and the line. <b>Modern Pastry</b>, a block down, fills each cannoli to order and is the locals’ pick. Try both and decide for yourselves.'],
    tip:'Bring cash just in case. Hanover St is lined with trattorias if you want to stay for dinner.'},
-  {leg:'northend', ll:[42.362094,-71.057926], walk:5, dur:0, finish:true, name:'Finish · Haymarket', addr:'Orange & Green Lines', cap:'Haymarket’s pushcart market (Fridays and Saturdays)',
-   body:['You did it. Haymarket station is just back across the Greenway, and North Station is about a 10-minute walk if you need the commuter rail.']},
+  {leg:'northend', ll:[42.362094,-71.057926], walk:7, dur:0, finish:true, name:'Finish · Haymarket', addr:'Orange & Green Lines', cap:'Haymarket’s pushcart market (Fridays and Saturdays)',
+   body:['Follow Hanover St down past Modern Pastry and back across the Greenway. You did it. Haymarket station is right here, and North Station is about a 10-minute walk if you need the commuter rail.']},
 
   {leg:'extra', ll:[42.352217,-71.062607], walk:2, dur:12, optional:true, name:'Orange Line → Chinatown', addr:'Haymarket station → Chinatown station', transit:[42.352217,-71.062607], cap:'An Orange Line train at Haymarket',
    body:['Still have energy, or want dinner? Take the Orange Line toward <b>Forest Hills</b> three stops (State, Downtown Crossing, Chinatown), about 6 minutes of riding.'],

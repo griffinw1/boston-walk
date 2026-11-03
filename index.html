@@ -174,14 +174,6 @@ footer summary{cursor:pointer;font-weight:600;color:var(--soft)}
 footer ol{padding-left:20px;margin:8px 0 0}
 footer li{margin-bottom:3px}
 
-/* welcome note */
-.note{position:relative;background:var(--card);border:1px solid var(--line);border-radius:4px 18px 4px 18px;padding:22px 22px 18px;margin:20px 0 0;box-shadow:var(--shadow)}
-.note::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;background:linear-gradient(var(--brick),var(--gold))}
-.note-hi{font:italic 400 22px var(--serif);color:var(--brick);margin:0 0 6px}
-.note p{font:400 16.5px/1.75 var(--serif);color:var(--ink);margin:0 0 8px}
-.note .sig2{font:italic 400 19px var(--serif);color:var(--navy);text-align:right;margin:4px 0 0}
-.seal{position:absolute;right:-8px;top:-12px;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#C4483A,var(--brick) 60%,#6E2016);color:#F7D9A8;display:grid;place-items:center;font:400 22px var(--display);box-shadow:0 4px 10px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.12);transform:rotate(-10deg)}
-
 /* afternoon at a glance */
 .glance-h{font:600 13px var(--cond);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
 .glance{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px;scrollbar-width:none}
@@ -273,13 +265,6 @@ footer li{margin-bottom:3px}
 <div class="bricks"></div>
 
 <div class="wrap intro reveal">
-  <div class="note">
-    <div class="seal" aria-hidden="true">G</div>
-    <p class="note-hi">Mom &amp; Stella,</p>
-    <p>I’ll show you around campus and walk you up Newbury, then you’re on your own from the Public Garden. Everything is in order below. Tap a stop to find it on the map, hit Directions if you get turned around, and check things off as you go.</p>
-    <p>Take your time, skip whatever you like, and save room for cannoli.</p>
-    <p class="sig2">Love, Griffin</p>
-  </div>
   <div class="glance-h">Your afternoon at a glance</div>
   <div class="glance" id="glance"></div>
   <div class="stats" style="margin-top:14px">
